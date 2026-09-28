@@ -1,0 +1,171 @@
+﻿@model IEnumerable<SistemaFacturacion.Models.Cliente>
+
+@{
+    ViewData["Title"] = "Nueva Factura";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Nueva Factura
+        </h1>
+
+        <p class="text-muted mb-0">
+            Complete los pasos para generar una nueva factura
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a facturas
+    </a>
+
+</div>
+
+
+<!-- INDICADOR DE PASOS -->
+<div class="invoice-steps mb-4">
+
+    <div class="invoice-step active">
+
+        <div class="invoice-step-number">
+            1
+        </div>
+
+        <div>
+            <strong>Cliente</strong>
+            <small>Seleccionar cliente</small>
+        </div>
+
+    </div>
+
+
+    <div class="invoice-step-line"></div>
+
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            2
+        </div>
+
+        <div>
+            <strong>Productos</strong>
+            <small>Agregar productos</small>
+        </div>
+
+    </div>
+
+
+    <div class="invoice-step-line"></div>
+
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            3
+        </div>
+
+        <div>
+            <strong>Resumen</strong>
+            <small>Revisar factura</small>
+        </div>
+
+    </div>
+
+
+    <div class="invoice-step-line"></div>
+
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            4
+        </div>
+
+        <div>
+            <strong>Factura</strong>
+            <small>Comprobante final</small>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- SELECCIÓN DE CLIENTE -->
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Seleccionar cliente
+            </h5>
+
+            <p class="text-muted form-section-description">
+                Seleccione el cliente al que se emitirá la factura.
+            </p>
+
+
+            <form asp-action="Nueva"
+                  method="post">
+
+                <div class="row">
+
+                    <div class="col-lg-8">
+
+                        <label class="form-label">
+                            Cliente
+                        </label>
+
+                        <select name="clienteId"
+                                class="form-select"
+                                required>
+
+                            <option value="">
+                                Seleccione un cliente...
+                            </option>
+
+                            @foreach (var cliente in Model)
+                            {
+                                <option value="@cliente.Id">
+                                    @cliente.Nombre
+                                </option>
+                            }
+
+                        </select>
+
+                        <small class="text-muted d-block mt-2">
+                            Solo se muestran los clientes disponibles para facturar.
+                        </small>
+
+                    </div>
+
+                </div>
+
+
+                <div class="form-actions mt-4">
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Cancelar
+                    </a>
+
+                    <button type="submit"
+                            class="btn btn-primary">
+                        Continuar a Productos →
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>

@@ -1,0 +1,904 @@
+/* =========================================================
+   SISTEMA DE FACTURACIÓN
+   Estilos generales
+   ========================================================= */
+
+
+/* ---------- CONFIGURACIÓN GENERAL ---------- */
+
+html {
+    font-size: 14px;
+    position: relative;
+    min-height: 100%;
+}
+
+@media (min-width: 768px) {
+    html {
+        font-size: 16px;
+    }
+}
+
+body {
+    min-height: 100vh;
+    margin-bottom: 70px;
+    background-color: #f4f6f9;
+    color: #2d3748;
+    font-family: "Segoe UI", Arial, sans-serif;
+}
+
+
+/* ---------- BARRA DE NAVEGACIÓN ---------- */
+
+.navbar {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+}
+
+    .navbar.bg-dark {
+        background: linear-gradient(135deg, #182848, #243b55) !important;
+    }
+
+.navbar-brand {
+    font-size: 1.3rem;
+    letter-spacing: 0.3px;
+}
+
+.navbar .nav-link {
+    color: rgba(255, 255, 255, 0.78) !important;
+    margin-left: 6px;
+    margin-right: 6px;
+    border-radius: 6px;
+    padding-left: 12px !important;
+    padding-right: 12px !important;
+    transition: all 0.2s ease;
+}
+
+    .navbar .nav-link:hover {
+        color: #ffffff !important;
+        background-color: rgba(255, 255, 255, 0.10);
+    }
+
+
+/* ---------- CONTENEDOR PRINCIPAL ---------- */
+
+main {
+    animation: aparecer 0.25s ease-in-out;
+}
+
+@keyframes aparecer {
+    from {
+        opacity: 0;
+        transform: translateY(4px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+
+/* ---------- TÍTULOS ---------- */
+
+h1,
+h2,
+h3 {
+    color: #1f2937;
+    font-weight: 650;
+}
+
+h1 {
+    margin-bottom: 1.5rem;
+}
+
+
+/* ---------- TARJETAS ---------- */
+
+.card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+    .card:hover {
+        box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+    }
+
+.card-header {
+    background-color: #ffffff;
+    border-bottom: 1px solid #edf0f4;
+    font-weight: 600;
+}
+
+.card-body {
+    padding: 1.4rem;
+}
+
+
+/* ---------- TABLAS ---------- */
+
+.table {
+    background-color: #ffffff;
+    vertical-align: middle;
+}
+
+    .table thead th {
+        background-color: #eef2f7;
+        color: #374151;
+        font-weight: 600;
+        border-bottom: none;
+        padding-top: 13px;
+        padding-bottom: 13px;
+    }
+
+    .table tbody td {
+        padding-top: 12px;
+        padding-bottom: 12px;
+        border-color: #edf0f4;
+    }
+
+    .table tbody tr {
+        transition: background-color 0.15s ease;
+    }
+
+        .table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+
+/* ---------- BOTONES ---------- */
+
+.btn {
+    border-radius: 7px;
+    font-weight: 500;
+    padding: 0.45rem 0.9rem;
+    transition: all 0.2s ease;
+}
+
+    .btn:hover {
+        transform: translateY(-1px);
+    }
+
+.btn-primary {
+    background-color: #2563eb;
+    border-color: #2563eb;
+}
+
+    .btn-primary:hover {
+        background-color: #1d4ed8;
+        border-color: #1d4ed8;
+    }
+
+.btn-success {
+    background-color: #16a34a;
+    border-color: #16a34a;
+}
+
+    .btn-success:hover {
+        background-color: #15803d;
+        border-color: #15803d;
+    }
+
+.btn-danger {
+    background-color: #dc2626;
+    border-color: #dc2626;
+}
+
+    .btn-danger:hover {
+        background-color: #b91c1c;
+        border-color: #b91c1c;
+    }
+
+.btn-secondary {
+    background-color: #64748b;
+    border-color: #64748b;
+}
+
+
+/* ---------- FORMULARIOS ---------- */
+
+.form-control,
+.form-select {
+    border-radius: 7px;
+    border: 1px solid #d6dce5;
+    padding: 0.6rem 0.75rem;
+}
+
+    .form-control:focus,
+    .form-select:focus {
+        border-color: #2563eb;
+        box-shadow: 0 0 0 0.20rem rgba(37, 99, 235, 0.12);
+    }
+
+.form-label {
+    color: #374151;
+    font-weight: 500;
+}
+
+
+/* ---------- BADGES / ESTADOS ---------- */
+
+.badge {
+    padding: 0.5em 0.75em;
+    border-radius: 6px;
+    font-weight: 500;
+}
+
+
+/* ---------- ALERTAS ---------- */
+
+.alert {
+    border: none;
+    border-radius: 10px;
+}
+
+
+/* ---------- FACTURA ---------- */
+
+.text-end {
+    font-variant-numeric: tabular-nums;
+}
+
+
+/* ---------- PIE DE PÁGINA ---------- */
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    min-height: 60px;
+    line-height: 60px;
+    background-color: #ffffff;
+    color: #6b7280 !important;
+}
+
+
+/* ---------- ACCESIBILIDAD / FOCO ---------- */
+
+.btn:focus,
+.btn:active:focus,
+.btn-link.nav-link:focus,
+.form-control:focus,
+.form-check-input:focus,
+.form-select:focus {
+    outline: none;
+}
+
+
+/* ---------- FORM FLOATING ---------- */
+
+.form-floating > .form-control-plaintext::placeholder,
+.form-floating > .form-control::placeholder {
+    color: var(--bs-secondary-color);
+    text-align: end;
+}
+
+.form-floating > .form-control-plaintext:focus::placeholder,
+.form-floating > .form-control:focus::placeholder {
+    text-align: start;
+}
+
+
+/* =========================================================
+   IMPRESIÓN DE FACTURAS
+   ========================================================= */
+
+@media print {
+
+    body {
+        background-color: #ffffff;
+        margin: 0;
+    }
+
+    header,
+    footer {
+        display: none !important;
+    }
+
+    .navbar {
+        display: none !important;
+    }
+
+    .btn {
+        display: none !important;
+    }
+
+    .container {
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+
+    main {
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+
+    .card {
+        box-shadow: none !important;
+        border: 1px solid #dddddd;
+    }
+
+    .table {
+        background-color: #ffffff !important;
+    }
+}
+
+/* =========================================================
+   DASHBOARD
+   ========================================================= */
+
+.dashboard-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+    .dashboard-header h1 {
+        margin-bottom: 0;
+    }
+
+
+/* TARJETAS DE INDICADORES */
+
+.dashboard-card {
+    position: relative;
+    overflow: hidden;
+    border-left: 4px solid #2563eb;
+}
+
+.dashboard-card-danger {
+    border-left-color: #dc2626;
+}
+
+.dashboard-card-label {
+    color: #64748b;
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.dashboard-number {
+    color: #1e293b;
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.2;
+    margin-top: 10px;
+    margin-bottom: 15px;
+}
+
+.dashboard-link {
+    color: #2563eb;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+    .dashboard-link:hover {
+        text-decoration: underline;
+    }
+
+
+/* TOTAL FACTURADO */
+
+.total-card {
+    border-left: 4px solid #16a34a;
+}
+
+.total-number {
+    color: #15803d;
+    font-size: 2.6rem;
+    font-weight: 700;
+    line-height: 1.1;
+}
+
+
+/* ACCIONES RÁPIDAS */
+
+.quick-action {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 100%;
+    padding: 16px;
+    background-color: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    color: #1f2937;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+    .quick-action:hover {
+        background-color: #ffffff;
+        border-color: #2563eb;
+        color: #1f2937;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.07);
+    }
+
+.quick-action-symbol {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 42px;
+    height: 42px;
+    border-radius: 9px;
+    background-color: #e8efff;
+    color: #2563eb;
+    font-size: 1.15rem;
+    font-weight: 700;
+}
+
+.quick-action strong {
+    display: block;
+    font-size: 0.95rem;
+}
+
+.quick-action small {
+    display: block;
+    margin-top: 2px;
+    color: #64748b;
+    font-size: 0.78rem;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 767px) {
+
+    .dashboard-header {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+        .dashboard-header .btn {
+            width: 100%;
+        }
+
+    .dashboard-number {
+        font-size: 2rem;
+    }
+
+    .total-number {
+        font-size: 2rem;
+    }
+}
+
+/* =========================================================
+   PÁGINAS DE ADMINISTRACIÓN
+   ========================================================= */
+
+.page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+}
+
+    .page-header h1 {
+        margin-bottom: 0;
+    }
+
+
+/* TABLAS DE ADMINISTRACIÓN */
+
+.table-responsive {
+    border-radius: 12px;
+}
+
+.table thead th {
+    white-space: nowrap;
+}
+
+.table tbody td {
+    vertical-align: middle;
+}
+
+
+/* ESTADOS */
+
+.bg-success-subtle {
+    background-color: #dcfce7 !important;
+}
+
+.bg-danger-subtle {
+    background-color: #fee2e2 !important;
+}
+
+
+/* TABLA VACÍA */
+
+.empty-table {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    color: #64748b;
+}
+
+    .empty-table strong {
+        color: #374151;
+        font-size: 1rem;
+    }
+
+    .empty-table span {
+        font-size: 0.9rem;
+    }
+
+
+/* BOTONES PEQUEÑOS DE TABLAS */
+
+.table .btn-sm {
+    padding: 0.32rem 0.65rem;
+    font-size: 0.82rem;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 767px) {
+
+    .page-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+        .page-header .btn {
+            width: 100%;
+        }
+}
+
+/* =========================================================
+   FORMULARIOS DE ADMINISTRACIÓN
+   ========================================================= */
+
+.form-section-title {
+    color: #1f2937;
+    font-size: 1rem;
+    font-weight: 650;
+    margin-bottom: 4px;
+}
+
+.form-section-description {
+    font-size: 0.88rem;
+    margin-bottom: 18px;
+}
+
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding-top: 20px;
+    border-top: 1px solid #edf0f4;
+}
+
+
+/* SWITCH ACTIVO / INACTIVO */
+
+.form-switch .form-check-input {
+    width: 2.5em;
+    height: 1.25em;
+    cursor: pointer;
+}
+
+.form-switch .form-check-label {
+    margin-left: 5px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+
+/* VALIDACIONES */
+
+.field-validation-error {
+    display: block;
+    margin-top: 5px;
+    font-size: 0.82rem;
+}
+
+.validation-summary-valid {
+    display: none;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 767px) {
+
+    .form-actions {
+        flex-direction: column-reverse;
+        align-items: stretch;
+    }
+
+        .form-actions .btn {
+            width: 100%;
+        }
+}
+
+/* =========================================================
+   VISTAS DE DETALLE
+   ========================================================= */
+
+.detail-label {
+    margin-bottom: 5px;
+    color: #64748b;
+    font-size: 0.78rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.detail-value {
+    color: #1f2937;
+    font-size: 1rem;
+    font-weight: 500;
+    min-height: 24px;
+}
+
+/* =========================================================
+   PROCESO DE FACTURACIÓN
+   ========================================================= */
+
+.invoice-steps {
+    display: flex;
+    align-items: center;
+    padding: 18px 22px;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 3px 12px rgba(0, 0, 0, 0.07);
+}
+
+.invoice-step {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #94a3b8;
+    flex-shrink: 0;
+}
+
+.invoice-step-number {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background-color: #eef2f7;
+    color: #64748b;
+    font-weight: 700;
+}
+
+.invoice-step strong {
+    display: block;
+    color: #64748b;
+    font-size: 0.9rem;
+}
+
+.invoice-step small {
+    display: block;
+    margin-top: 1px;
+    font-size: 0.75rem;
+}
+
+.invoice-step.active .invoice-step-number {
+    background-color: #2563eb;
+    color: #ffffff;
+}
+
+.invoice-step.active strong {
+    color: #1f2937;
+}
+
+.invoice-step.active small {
+    color: #64748b;
+}
+
+.invoice-step-line {
+    height: 2px;
+    flex: 1;
+    min-width: 25px;
+    margin: 0 16px;
+    background-color: #e2e8f0;
+}
+
+
+/* RESPONSIVE */
+
+@media (max-width: 767px) {
+
+    .invoice-steps {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .invoice-step-line {
+        width: 2px;
+        height: 20px;
+        min-width: 2px;
+        margin: 0 0 0 17px;
+    }
+}
+
+/* =========================================================
+   RESUMEN DE PAGO
+   ========================================================= */
+
+.payment-summary {
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.payment-summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #edf0f4;
+    color: #475569;
+}
+
+.payment-summary-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px;
+    padding: 16px;
+    background-color: #f0fdf4;
+    color: #15803d;
+    font-size: 1.2rem;
+}
+
+    .payment-summary-total strong {
+        font-size: 1.45rem;
+    }
+
+/* =========================================================
+   FACTURA FINAL
+   ========================================================= */
+
+.invoice-document {
+    max-width: 1050px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.invoice-document-title {
+    color: #1f2937;
+    font-size: 2rem;
+    font-weight: 750;
+    letter-spacing: 1px;
+}
+
+.invoice-number {
+    color: #2563eb;
+    font-size: 1.2rem;
+    font-weight: 700;
+}
+
+.invoice-info-box {
+    height: 100%;
+    padding: 18px;
+    background-color: #f8fafc;
+    border: 1px solid #e5e7eb;
+    border-radius: 10px;
+}
+
+.invoice-info-line {
+    margin-top: 4px;
+    color: #475569;
+    font-size: 0.92rem;
+}
+
+.invoice-products-table {
+    border: 1px solid #edf0f4;
+}
+
+.invoice-payment-info {
+    height: 100%;
+    padding: 18px;
+    background-color: #f8fafc;
+    border-radius: 10px;
+}
+
+.invoice-note {
+    color: #475569;
+    white-space: pre-line;
+}
+
+.invoice-cancelled {
+    border: 2px solid #fecaca;
+}
+
+.invoice-footer-text {
+    font-size: 0.85rem;
+}
+
+
+/* IMPRESIÓN DE FACTURA */
+
+@media print {
+
+    .no-print {
+        display: none !important;
+    }
+
+    .invoice-document {
+        max-width: 100%;
+        margin: 0;
+        box-shadow: none !important;
+        border: none !important;
+    }
+
+        .invoice-document .card-body {
+            padding: 0 !important;
+        }
+
+    .invoice-info-box,
+    .invoice-payment-info {
+        background-color: #ffffff !important;
+        border: 1px solid #dddddd;
+    }
+
+    .invoice-products-table {
+        border: 1px solid #dddddd;
+    }
+
+    .payment-summary-total {
+        background-color: #ffffff !important;
+        border-top: 2px solid #333333;
+    }
+}
+
+/* =========================================================
+   BOTONES DE ALTA Y BAJA
+   ========================================================= */
+
+.btn-outline-danger {
+    color: #dc2626;
+    border-color: #dc2626;
+    background-color: transparent;
+}
+
+    .btn-outline-danger:hover {
+        color: #ffffff;
+        background-color: #dc2626;
+        border-color: #dc2626;
+    }
+
+.btn-outline-success {
+    color: #16a34a;
+    border-color: #16a34a;
+    background-color: transparent;
+}
+
+    .btn-outline-success:hover {
+        color: #ffffff;
+        background-color: #16a34a;
+        border-color: #16a34a;
+    }
+
+/* =========================================================
+   CONFIRMACIÓN DE BAJA
+   ========================================================= */
+
+.deactivation-warning-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background-color: #dc2626;
+    color: #ffffff;
+    font-size: 1.1rem;
+    font-weight: 700;
+}

@@ -1,0 +1,412 @@
+@model SistemaFacturacion.Models.Cliente
+
+@{
+    ViewData["Title"] = "Detalle del Cliente";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Detalle del Cliente
+        </h1>
+
+        <p class="text-muted mb-0">
+            Información registrada del cliente
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a clientes
+    </a>
+
+</div>
+
+
+<!-- INFORMACIÓN DEL CLIENTE -->
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <!-- DATOS PRINCIPALES -->
+        <div class="form-section">
+
+            <div class="d-flex justify-content-between
+                align-items-start
+                flex-wrap
+                gap-3
+                mb-3">
+
+                <div>
+
+                    <h5 class="form-section-title">
+                        Datos principales
+                    </h5>
+
+                    <p class="text-muted form-section-description mb-0">
+                        Información de identificación del cliente.
+                    </p>
+
+                </div>
+
+                @if (Model.Activo)
+                {
+                    <span class="badge bg-success-subtle text-success">
+                        Activo
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger-subtle text-danger">
+                        Inactivo
+                    </span>
+                }
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <!-- NOMBRE -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Nombre
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.Nombre
+                    </div>
+
+                </div>
+
+
+                <!-- CUIT -->
+                <div class="col-md-3">
+
+                    <div class="detail-label">
+                        CUIT
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.CUIT))
+                        {
+                            @Model.CUIT
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- DNI -->
+                <div class="col-md-3">
+
+                    <div class="detail-label">
+                        DNI
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.DNI))
+                        {
+                            @Model.DNI
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- UBICACIÓN -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Ubicación
+            </h5>
+
+            <p class="text-muted form-section-description">
+                Domicilio y ubicación registrada.
+            </p>
+
+
+            <div class="row g-4">
+
+                <!-- DIRECCIÓN -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Dirección
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Direccion))
+                        {
+                            @Model.Direccion
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informada
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOCALIDAD -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Localidad
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Localidad))
+                        {
+                            @Model.Localidad
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informada
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- PROVINCIA -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Provincia
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Provincia))
+                        {
+                            @Model.Provincia
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informada
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- CÓDIGO POSTAL -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Código Postal
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.CodigoPostal))
+                        {
+                            @Model.CodigoPostal
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- CONTACTO -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Datos de contacto
+            </h5>
+
+            <p class="text-muted form-section-description">
+                Información disponible para contactar al cliente.
+            </p>
+
+
+            <div class="row g-4">
+
+                <!-- TELÉFONO -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Teléfono
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Telefono))
+                        {
+                            @Model.Telefono
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Email
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Email))
+                        {
+                            @Model.Email
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- INFORMACIÓN DEL SISTEMA -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Información del sistema
+            </h5>
+
+            <p class="text-muted form-section-description">
+                Datos administrados automáticamente por el sistema.
+            </p>
+
+
+            <div class="row g-4">
+
+                <!-- FECHA DE ALTA -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Fecha de alta
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.FechaAlta.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+
+
+                <!-- ESTADO -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Estado
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (Model.Activo)
+                        {
+                            <span class="badge bg-success-subtle text-success">
+                                Activo
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger-subtle text-danger">
+                                Inactivo
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCIONES -->
+        <div class="form-actions mt-4">
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+                Volver
+            </a>
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                Editar Cliente
+            </a>
+
+        </div>
+
+    </div>
+
+</div>

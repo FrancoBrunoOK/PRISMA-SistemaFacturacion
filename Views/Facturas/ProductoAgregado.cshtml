@@ -1,0 +1,78 @@
+﻿@model SistemaFacturacion.Models.DetalleFacturaViewModel
+
+@{
+    ViewData["Title"] = "Producto agregado";
+}
+
+<h1>Nueva Factura</h1>
+
+<div class="card mb-4">
+
+    <div class="card-body">
+
+        <h5>Cliente seleccionado</h5>
+
+        <p class="mb-0">
+            <strong>@ViewBag.Cliente.Nombre</strong>
+        </p>
+
+    </div>
+
+</div>
+
+<div class="card">
+
+    <div class="card-body">
+
+        <h5 class="card-title">
+            Producto seleccionado
+        </h5>
+
+        <table class="table">
+
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th>Precio unitario</th>
+                    <th>Cantidad</th>
+                    <th>Subtotal</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        @Model.Descripcion
+                    </td>
+
+                    <td>
+                        @Model.PrecioUnitario.ToString("C2")
+                    </td>
+
+                    <td>
+                        @Model.Cantidad
+                    </td>
+
+                    <td>
+                        @Model.Subtotal.ToString("C2")
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<br />
+
+<a asp-action="Productos"
+   asp-route-clienteId="@ViewBag.Cliente.Id"
+   class="btn btn-secondary">
+    Volver a productos
+</a>

@@ -1,0 +1,239 @@
+@model SistemaFacturacion.Models.Producto
+
+@{
+    ViewData["Title"] = "Editar Producto";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Editar Producto
+        </h1>
+
+        <p class="text-muted mb-0">
+            Modifique los datos del producto
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a productos
+    </a>
+
+</div>
+
+
+<!-- FORMULARIO -->
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <form asp-action="Edit"
+              method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+            <!-- ID DEL PRODUCTO -->
+            <input type="hidden"
+                   asp-for="Id" />
+
+
+            <!-- INFORMACIÓN DEL PRODUCTO -->
+            <div class="form-section">
+
+                <h5 class="form-section-title">
+                    Información del producto
+                </h5>
+
+                <p class="text-muted form-section-description">
+                    Datos principales para identificar el producto dentro del catálogo.
+                </p>
+
+                <div class="row g-3">
+
+                    <!-- CÓDIGO -->
+                    <div class="col-md-4">
+
+                        <label asp-for="Codigo"
+                               class="form-label">
+                            Código
+                        </label>
+
+                        <input asp-for="Codigo"
+                               class="form-control"
+                               placeholder="Ej: PROD-001" />
+
+                        <span asp-validation-for="Codigo"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- DESCRIPCIÓN -->
+                    <div class="col-md-8">
+
+                        <label asp-for="Descripcion"
+                               class="form-label">
+                            Descripción
+                        </label>
+
+                        <input asp-for="Descripcion"
+                               class="form-control"
+                               placeholder="Descripción del producto" />
+
+                        <span asp-validation-for="Descripcion"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- PRECIO E IMPUESTOS -->
+            <div class="form-section">
+
+                <h5 class="form-section-title">
+                    Precio e impuestos
+                </h5>
+
+                <p class="text-muted form-section-description">
+                    Valores utilizados para calcular los importes de las facturas.
+                </p>
+
+                <div class="row g-3">
+
+                    <!-- PRECIO -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Precio"
+                               class="form-label">
+                            Precio unitario
+                        </label>
+
+                        <div class="input-group">
+
+                            <span class="input-group-text">
+                                $
+                            </span>
+
+                            <input asp-for="Precio"
+                                   class="form-control" />
+
+                        </div>
+
+                        <span asp-validation-for="Precio"
+                              class="text-danger">
+                        </span>
+
+                        <small class="text-muted">
+                            Precio unitario antes de IVA.
+                        </small>
+
+                    </div>
+
+
+                    <!-- IVA -->
+                    <div class="col-md-6">
+
+                        <label asp-for="IVA"
+                               class="form-label">
+                            IVA
+                        </label>
+
+                        <div class="input-group">
+
+                            <input asp-for="IVA"
+                                   class="form-control" />
+
+                            <span class="input-group-text">
+                                %
+                            </span>
+
+                        </div>
+
+                        <span asp-validation-for="IVA"
+                              class="text-danger">
+                        </span>
+
+                        <small class="text-muted">
+                            Porcentaje de IVA aplicado al producto.
+                        </small>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- ESTADO -->
+            <div class="form-section">
+
+                <h5 class="form-section-title">
+                    Estado
+                </h5>
+
+                <div class="form-check form-switch mt-3">
+
+                    <input asp-for="Activo"
+                           class="form-check-input"
+                           type="checkbox"
+                           role="switch" />
+
+                    <label asp-for="Activo"
+                           class="form-check-label">
+                        Producto activo
+                    </label>
+
+                </div>
+
+                <small class="text-muted">
+                    Los productos activos estarán disponibles al generar una factura.
+                </small>
+
+            </div>
+
+
+            <!-- ACCIONES -->
+            <div class="form-actions mt-4">
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Guardar cambios
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

@@ -1,0 +1,336 @@
+﻿@model IEnumerable<SistemaFacturacion.Models.Factura>
+
+@{
+    ViewData["Title"] = "Facturas";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Facturas
+        </h1>
+
+        <p class="text-muted mb-0">
+            Historial de facturas emitidas
+        </p>
+    </div>
+
+    <a asp-action="Nueva"
+       class="btn btn-primary">
+        + Nueva Factura
+    </a>
+
+</div>
+
+
+<!-- FILTROS -->
+<div class="card mb-4">
+
+    <div class="card-body">
+
+        <form asp-action="Index"
+              method="get">
+
+            <div class="row g-3 align-items-end">
+
+                <!-- BUSCADOR -->
+                <div class="col-md-5">
+
+                    <label class="form-label">
+                        Buscar factura
+                    </label>
+
+                    <input type="text"
+                           name="buscar"
+                           value="@ViewBag.Buscar"
+                           class="form-control"
+                           placeholder="Número de factura o cliente..." />
+
+                </div>
+
+
+                <!-- ESTADO -->
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Estado
+                    </label>
+
+                    <select name="filtroEstado"
+                            class="form-select">
+
+                        @if (ViewBag.FiltroEstado == "Todas")
+                        {
+                            <option value="Todas" selected>
+                                Todas
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Todas">
+                                Todas
+                            </option>
+                        }
+
+                        @if (ViewBag.FiltroEstado == "Activas")
+                        {
+                            <option value="Activas" selected>
+                                Activas
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Activas">
+                                Activas
+                            </option>
+                        }
+
+                        @if (ViewBag.FiltroEstado == "Anuladas")
+                        {
+                            <option value="Anuladas" selected>
+                                Anuladas
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Anuladas">
+                                Anuladas
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
+                <!-- BOTONES -->
+                <div class="col-md-4">
+
+                    <button type="submit"
+                            class="btn btn-primary me-2">
+                        Buscar
+                    </button>
+
+                    <a asp-action="Index"
+                       class="btn btn-outline-secondary">
+                        Limpiar
+                    </a>
+
+                </div>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<!-- HISTORIAL -->
+<div class="card">
+
+    <div class="card-body p-0">
+
+        <div class="table-responsive">
+
+            <table class="table table-hover mb-0">
+
+                <thead>
+
+                    <tr>
+
+                        <th class="ps-4">
+                            Número
+                        </th>
+
+                        <th>
+                            Fecha
+                        </th>
+
+                        <th>
+                            Cliente
+                        </th>
+
+                        <th class="text-end">
+                            Subtotal
+                        </th>
+
+                        <th class="text-end">
+                            IVA
+                        </th>
+
+                        <th class="text-end">
+                            Total
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th class="text-end pe-4">
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    @if (Model.Any())
+                    {
+                        @foreach (var factura in Model)
+                        {
+                            <tr>
+
+                                <!-- NÚMERO -->
+                                <td class="ps-4">
+
+                                    <strong>
+                                        @factura.Numero
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- FECHA -->
+                                <td>
+                                    @factura.FechaEmision.ToString("dd/MM/yyyy HH:mm")
+                                </td>
+
+
+                                <!-- CLIENTE -->
+                                <td>
+
+                                    @if (factura.Cliente != null)
+                                    {
+                                        <strong>
+                                            @factura.Cliente.Nombre
+                                        </strong>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            —
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- SUBTOTAL -->
+                                <td class="text-end">
+                                    @factura.Subtotal.ToString("C2")
+                                </td>
+
+
+                                <!-- IVA -->
+                                <td class="text-end">
+                                    @factura.TotalIVA.ToString("C2")
+                                </td>
+
+
+                                <!-- TOTAL -->
+                                <td class="text-end">
+
+                                    <strong>
+                                        @factura.Total.ToString("C2")
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- ESTADO -->
+                                <td>
+
+                                    @if (factura.Activa)
+                                    {
+                                        <span class="badge bg-success-subtle text-success">
+                                            Activa
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger">
+                                            Anulada
+                                        </span>
+                                    }
+
+                                </td>
+
+
+                                <!-- ACCIONES -->
+                                <td class="text-end pe-4">
+
+                                    <div class="d-inline-flex gap-1">
+
+                                        <a asp-action="Detalle"
+                                           asp-route-id="@factura.Id"
+                                           class="btn btn-sm btn-outline-primary">
+                                            Ver
+                                        </a>
+
+                                        @if (factura.Activa)
+                                        {
+                                            <form asp-action="DarDeBaja"
+                                                  method="post"
+                                                  class="d-inline">
+
+                                                @Html.AntiForgeryToken()
+
+                                                <input type="hidden"
+                                                       name="id"
+                                                       value="@factura.Id" />
+
+                                                <button type="submit"
+                                                        class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('¿Está seguro que desea anular esta factura?');">
+                                                    Anular
+                                                </button>
+
+                                            </form>
+                                        }
+
+                                    </div>
+
+                                </td>
+
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+
+                            <td colspan="8"
+                                class="text-center py-5">
+
+                                <div class="empty-table">
+
+                                    <strong>
+                                        No se encontraron facturas
+                                    </strong>
+
+                                    <span>
+                                        Probá modificando los filtros de búsqueda.
+                                    </span>
+
+                                </div>
+
+                            </td>
+
+                        </tr>
+                    }
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+</div>

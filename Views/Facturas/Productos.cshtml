@@ -1,0 +1,482 @@
+﻿@model IEnumerable<SistemaFacturacion.Models.Producto>
+
+@using SistemaFacturacion.Models
+
+@{
+    ViewData["Title"] = "Productos";
+
+    var facturaActual =
+        ViewBag.FacturaActual as NuevaFacturaViewModel;
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Nueva Factura
+        </h1>
+
+        <p class="text-muted mb-0">
+            Seleccione los productos que desea incluir en la factura
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Cancelar factura
+    </a>
+
+</div>
+
+
+<!-- INDICADOR DE PASOS -->
+<div class="invoice-steps mb-4">
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            1
+        </div>
+
+        <div>
+            <strong>Cliente</strong>
+            <small>Seleccionar cliente</small>
+        </div>
+
+    </div>
+
+    <div class="invoice-step-line"></div>
+
+    <div class="invoice-step active">
+
+        <div class="invoice-step-number">
+            2
+        </div>
+
+        <div>
+            <strong>Productos</strong>
+            <small>Agregar productos</small>
+        </div>
+
+    </div>
+
+    <div class="invoice-step-line"></div>
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            3
+        </div>
+
+        <div>
+            <strong>Resumen</strong>
+            <small>Revisar factura</small>
+        </div>
+
+    </div>
+
+    <div class="invoice-step-line"></div>
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            4
+        </div>
+
+        <div>
+            <strong>Factura</strong>
+            <small>Comprobante final</small>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- CLIENTE SELECCIONADO -->
+<div class="card mb-4">
+
+    <div class="card-body">
+
+        <div class="d-flex justify-content-between
+                    align-items-center
+                    flex-wrap
+                    gap-3">
+
+            <div>
+
+                <div class="detail-label">
+                    Cliente seleccionado
+                </div>
+
+                <div class="detail-value">
+                    @ViewBag.Cliente.Nombre
+                </div>
+
+            </div>
+
+            <a asp-action="Nueva"
+               class="btn btn-sm btn-outline-secondary">
+                Cambiar cliente
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCTOS DISPONIBLES -->
+<div class="card mb-4">
+
+    <div class="card-header py-3">
+
+        <strong>
+            Productos disponibles
+        </strong>
+
+    </div>
+
+    <div class="card-body p-0">
+
+        @if (!Model.Any())
+        {
+            <div class="p-4">
+
+                <div class="alert alert-warning mb-0">
+                    No hay productos activos disponibles.
+                </div>
+
+            </div>
+        }
+        else
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="ps-4">
+                                Código
+                            </th>
+
+                            <th>
+                                Producto
+                            </th>
+
+                            <th class="text-end">
+                                Precio unitario
+                            </th>
+
+                            <th class="text-center">
+                                Cantidad
+                            </th>
+
+                            <th class="text-end pe-4">
+                                Acción
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var producto in Model)
+                        {
+                            <tr>
+
+                                <!-- CÓDIGO -->
+                                <td class="ps-4">
+
+                                    <strong>
+                                        @producto.Codigo
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- PRODUCTO -->
+                                <td>
+                                    @producto.Descripcion
+                                </td>
+
+
+                                <!-- PRECIO -->
+                                <td class="text-end">
+                                    @producto.Precio.ToString("C2")
+                                </td>
+
+
+                                <!-- CANTIDAD -->
+                                <td>
+
+                                    <div class="d-flex justify-content-center">
+
+                                        <input type="number"
+                                               name="cantidad"
+                                               value="1"
+                                               min="1"
+                                               step="1"
+                                               class="form-control text-center"
+                                               style="width: 90px;"
+                                               form="form-@producto.Id" />
+
+                                    </div>
+
+                                </td>
+
+
+                                <!-- AGREGAR -->
+                                <td class="text-end pe-4">
+
+                                    <form id="form-@producto.Id"
+                                          asp-action="AgregarProducto"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="clienteId"
+                                               value="@ViewBag.Cliente.Id" />
+
+                                        <input type="hidden"
+                                               name="productoId"
+                                               value="@producto.Id" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-primary">
+                                            + Agregar
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<!-- PRODUCTOS AGREGADOS -->
+<div class="card mb-4">
+
+    <div class="card-header py-3">
+
+        <div class="d-flex justify-content-between
+                    align-items-center">
+
+            <strong>
+                Productos agregados
+            </strong>
+
+            @if (facturaActual != null &&
+                 facturaActual.Detalles.Any())
+            {
+                <span class="badge bg-primary">
+                    @facturaActual.Detalles.Count
+                </span>
+            }
+
+        </div>
+
+    </div>
+
+
+    <div class="card-body p-0">
+
+        @if (facturaActual != null &&
+             facturaActual.Detalles.Any())
+        {
+            <div class="table-responsive">
+
+                <table class="table table-hover mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th class="ps-4">
+                                Producto
+                            </th>
+
+                            <th class="text-end">
+                                Precio unitario
+                            </th>
+
+                            <th class="text-center">
+                                Cantidad
+                            </th>
+
+                            <th class="text-end">
+                                Subtotal
+                            </th>
+
+                            <th class="text-end pe-4">
+                                Acción
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var detalle in facturaActual.Detalles)
+                        {
+                            <tr>
+
+                                <!-- PRODUCTO -->
+                                <td class="ps-4">
+
+                                    <strong>
+                                        @detalle.Descripcion
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- PRECIO -->
+                                <td class="text-end">
+                                    @detalle.PrecioUnitario.ToString("C2")
+                                </td>
+
+
+                                <!-- CANTIDAD -->
+                                <td class="text-center">
+                                    @detalle.Cantidad
+                                </td>
+
+
+                                <!-- SUBTOTAL -->
+                                <td class="text-end">
+
+                                    <strong>
+                                        @detalle.Subtotal.ToString("C2")
+                                    </strong>
+
+                                </td>
+
+
+                                <!-- QUITAR -->
+                                <td class="text-end pe-4">
+
+                                    <form asp-action="QuitarProducto"
+                                          method="post"
+                                          class="d-inline">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <input type="hidden"
+                                               name="clienteId"
+                                               value="@ViewBag.Cliente.Id" />
+
+                                        <input type="hidden"
+                                               name="productoId"
+                                               value="@detalle.ProductoId" />
+
+                                        <button type="submit"
+                                                class="btn btn-sm btn-outline-danger">
+                                            Quitar
+                                        </button>
+
+                                    </form>
+
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+
+                    <!-- SUBTOTAL -->
+                    <tfoot>
+
+                        <tr>
+
+                            <td colspan="3"
+                                class="text-end py-3">
+
+                                <strong>
+                                    Subtotal:
+                                </strong>
+
+                            </td>
+
+                            <td class="text-end py-3">
+
+                                <strong>
+                                    @facturaActual.Subtotal.ToString("C2")
+                                </strong>
+
+                            </td>
+
+                            <td></td>
+
+                        </tr>
+
+                    </tfoot>
+
+                </table>
+
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+
+                <div class="empty-table">
+
+                    <strong>
+                        Todavía no agregaste productos
+                    </strong>
+
+                    <span>
+                        Seleccioná un producto de la lista superior para comenzar.
+                    </span>
+
+                </div>
+
+            </div>
+        }
+
+    </div>
+
+</div>
+
+
+<!-- NAVEGACIÓN -->
+<div class="form-actions">
+
+    <a asp-action="Nueva"
+       class="btn btn-outline-secondary">
+        ← Volver al Cliente
+    </a>
+
+    @if (facturaActual != null &&
+         facturaActual.Detalles.Any())
+    {
+        <a asp-action="Resumen"
+           class="btn btn-primary">
+            Continuar al Resumen →
+        </a>
+    }
+
+</div>

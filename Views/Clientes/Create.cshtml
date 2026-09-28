@@ -1,0 +1,339 @@
+@model SistemaFacturacion.Models.Cliente
+
+@{
+    ViewData["Title"] = "Nuevo Cliente";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Nuevo Cliente
+        </h1>
+
+        <p class="text-muted mb-0">
+            Complete los datos para registrar un nuevo cliente
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+
+        Volver a clientes
+
+    </a>
+
+</div>
+
+
+<!-- FORMULARIO -->
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <form asp-action="Create"
+              method="post">
+
+            <div asp-validation-summary="ModelOnly"
+                 class="alert alert-danger">
+            </div>
+
+
+            <!-- DATOS PRINCIPALES -->
+            <div class="form-section">
+
+                <h5 class="form-section-title">
+                    Datos principales
+                </h5>
+
+                <p class="text-muted form-section-description">
+                    Información básica de identificación del cliente.
+                </p>
+
+
+                <div class="row g-3">
+
+                    <!-- NOMBRE -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Nombre"
+                               class="form-label">
+                            Nombre
+                        </label>
+
+                        <input asp-for="Nombre"
+                               class="form-control"
+                               placeholder="Nombre o razón social" />
+
+                        <span asp-validation-for="Nombre"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CUIT -->
+                    <div class="col-md-3">
+
+                        <label asp-for="CUIT"
+                               class="form-label">
+                            CUIT
+                        </label>
+
+                        <input asp-for="CUIT"
+                               class="form-control"
+                               placeholder="CUIT" />
+
+                        <span asp-validation-for="CUIT"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- DNI -->
+                    <div class="col-md-3">
+
+                        <label asp-for="DNI"
+                               class="form-label">
+                            DNI
+                        </label>
+
+                        <input asp-for="DNI"
+                               class="form-control"
+                               placeholder="DNI" />
+
+                        <span asp-validation-for="DNI"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- UBICACIÓN -->
+            <div class="form-section">
+
+                <h5 class="form-section-title">
+                    Ubicación
+                </h5>
+
+                <p class="text-muted form-section-description">
+                    Domicilio y ubicación del cliente.
+                </p>
+
+
+                <div class="row g-3">
+
+                    <!-- DIRECCIÓN -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Direccion"
+                               class="form-label">
+                            Dirección
+                        </label>
+
+                        <input asp-for="Direccion"
+                               class="form-control"
+                               placeholder="Calle y número" />
+
+                        <span asp-validation-for="Direccion"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- LOCALIDAD -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Localidad"
+                               class="form-label">
+                            Localidad
+                        </label>
+
+                        <input asp-for="Localidad"
+                               class="form-control"
+                               placeholder="Localidad" />
+
+                        <span asp-validation-for="Localidad"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- PROVINCIA -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Provincia"
+                               class="form-label">
+                            Provincia
+                        </label>
+
+                        <input asp-for="Provincia"
+                               class="form-control"
+                               placeholder="Provincia" />
+
+                        <span asp-validation-for="Provincia"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- CÓDIGO POSTAL -->
+                    <div class="col-md-6">
+
+                        <label asp-for="CodigoPostal"
+                               class="form-label">
+                            Código Postal
+                        </label>
+
+                        <input asp-for="CodigoPostal"
+                               class="form-control"
+                               placeholder="Código postal" />
+
+                        <span asp-validation-for="CodigoPostal"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- CONTACTO -->
+            <div class="form-section">
+
+                <h5 class="form-section-title">
+                    Datos de contacto
+                </h5>
+
+                <p class="text-muted form-section-description">
+                    Información para contactar al cliente.
+                </p>
+
+
+                <div class="row g-3">
+
+                    <!-- TELÉFONO -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Telefono"
+                               class="form-label">
+                            Teléfono
+                        </label>
+
+                        <input asp-for="Telefono"
+                               class="form-control"
+                               placeholder="Teléfono" />
+
+                        <span asp-validation-for="Telefono"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+
+                    <!-- EMAIL -->
+                    <div class="col-md-6">
+
+                        <label asp-for="Email"
+                               class="form-label">
+                            Email
+                        </label>
+
+                        <input asp-for="Email"
+                               class="form-control"
+                               placeholder="correo@ejemplo.com" />
+
+                        <span asp-validation-for="Email"
+                              class="text-danger">
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <hr class="my-4" />
+
+
+            <!-- ESTADO -->
+            <div class="form-section">
+
+                <h5 class="form-section-title">
+                    Estado
+                </h5>
+
+                <div class="form-check form-switch mt-3">
+
+                    <input asp-for="Activo"
+                           class="form-check-input"
+                           type="checkbox"
+                           role="switch" />
+
+                    <label asp-for="Activo"
+                           class="form-check-label">
+
+                        Cliente activo
+
+                    </label>
+
+                </div>
+
+                <small class="text-muted">
+                    Los clientes activos estarán disponibles al generar una factura.
+                </small>
+
+            </div>
+
+
+            <!-- BOTONES -->
+            <div class="form-actions mt-4">
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">
+
+                    Cancelar
+
+                </a>
+
+                <button type="submit"
+                        class="btn btn-primary">
+
+                    Guardar Cliente
+
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+@section Scripts {
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+
+}

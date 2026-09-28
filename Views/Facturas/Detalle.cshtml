@@ -1,0 +1,458 @@
+﻿@model SistemaFacturacion.Models.Factura
+
+@{
+    ViewData["Title"] = "Factura " + Model.Numero;
+}
+
+<!-- ENCABEZADO DE LA PÁGINA -->
+<div class="page-header mb-4 no-print">
+
+    <div>
+        <h1 class="mb-1">
+            Factura
+        </h1>
+
+        <p class="text-muted mb-0">
+            Comprobante N.º @Model.Numero
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a facturas
+    </a>
+
+</div>
+
+
+<!-- PASO FINAL -->
+<div class="invoice-steps mb-4 no-print">
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            1
+        </div>
+
+        <div>
+            <strong>Cliente</strong>
+            <small>Seleccionar cliente</small>
+        </div>
+
+    </div>
+
+    <div class="invoice-step-line"></div>
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            2
+        </div>
+
+        <div>
+            <strong>Productos</strong>
+            <small>Agregar productos</small>
+        </div>
+
+    </div>
+
+    <div class="invoice-step-line"></div>
+
+    <div class="invoice-step">
+
+        <div class="invoice-step-number">
+            3
+        </div>
+
+        <div>
+            <strong>Resumen</strong>
+            <small>Revisar factura</small>
+        </div>
+
+    </div>
+
+    <div class="invoice-step-line"></div>
+
+    <div class="invoice-step active">
+
+        <div class="invoice-step-number">
+            4
+        </div>
+
+        <div>
+            <strong>Factura</strong>
+            <small>Comprobante final</small>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- FACTURA -->
+<div class="card invoice-document">
+
+    <div class="card-body p-4 p-md-5">
+
+        <!-- FACTURA ANULADA -->
+        @if (!Model.Activa)
+        {
+            <div class="alert alert-danger text-center invoice-cancelled mb-4">
+
+                <h3 class="mb-1">
+                    FACTURA ANULADA
+                </h3>
+
+                <p class="mb-0">
+                    Este comprobante se encuentra anulado.
+                </p>
+
+            </div>
+        }
+
+
+        <!-- CABECERA DEL COMPROBANTE -->
+        <div class="d-flex justify-content-between
+                    align-items-start
+                    flex-wrap
+                    gap-4
+                    mb-4">
+
+            <div>
+
+                <div class="invoice-document-title">
+                    FACTURA
+                </div>
+
+                <div class="text-muted mt-1">
+                    Comprobante de facturación
+                </div>
+
+            </div>
+
+
+            <div class="text-md-end">
+
+                <div class="detail-label">
+                    Número
+                </div>
+
+                <div class="invoice-number">
+                    N.º @Model.Numero
+                </div>
+
+                <div class="detail-label mt-3">
+                    Fecha de emisión
+                </div>
+
+                <div class="detail-value">
+                    @Model.FechaEmision.ToString("dd/MM/yyyy HH:mm")
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- CLIENTE / EMISOR -->
+        <div class="row g-4 mb-4">
+
+            <!-- CLIENTE -->
+            <div class="col-md-6">
+
+                <div class="invoice-info-box">
+
+                    <div class="detail-label mb-2">
+                        Facturado a
+                    </div>
+
+                    <div class="detail-value mb-2">
+                        <strong>
+                            @Model.Cliente?.Nombre
+                        </strong>
+                    </div>
+
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Cliente?.CUIT))
+                    {
+                        <div class="invoice-info-line">
+                            CUIT: @Model.Cliente.CUIT
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Cliente?.DNI))
+                    {
+                        <div class="invoice-info-line">
+                            DNI: @Model.Cliente.DNI
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Cliente?.Direccion))
+                    {
+                        <div class="invoice-info-line">
+                            @Model.Cliente.Direccion
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Cliente?.Localidad))
+                    {
+                        <div class="invoice-info-line">
+                            @Model.Cliente.Localidad
+
+                            @if (!string.IsNullOrWhiteSpace(Model.Cliente?.Provincia))
+                            {
+                                <span>
+                                    , @Model.Cliente.Provincia
+                                </span>
+                            }
+                        </div>
+                    }
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Cliente?.Email))
+                    {
+                        <div class="invoice-info-line">
+                            @Model.Cliente.Email
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- EMISOR -->
+            <div class="col-md-6">
+
+                <div class="invoice-info-box">
+
+                    <div class="detail-label mb-2">
+                        Emitido por
+                    </div>
+
+                    <div class="detail-value mb-2">
+                        <strong>
+                            SistemaFacturacion
+                        </strong>
+                    </div>
+
+                    <div class="invoice-info-line text-muted">
+                        Sistema de gestión y facturación
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PRODUCTOS -->
+        <div class="mb-4">
+
+            <h5 class="form-section-title mb-3">
+                Detalle de productos
+            </h5>
+
+            <div class="table-responsive">
+
+                <table class="table invoice-products-table mb-0">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                Producto
+                            </th>
+
+                            <th class="text-center">
+                                Cantidad
+                            </th>
+
+                            <th class="text-end">
+                                Precio unitario
+                            </th>
+
+                            <th class="text-end">
+                                IVA
+                            </th>
+
+                            <th class="text-end">
+                                Subtotal
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        @foreach (var detalle in Model.Detalles)
+                        {
+                            <tr>
+
+                                <td>
+                                    <strong>
+                                        @detalle.Descripcion
+                                    </strong>
+                                </td>
+
+                                <td class="text-center">
+                                    @detalle.Cantidad
+                                </td>
+
+                                <td class="text-end">
+                                    @detalle.PrecioUnitario.ToString("C2")
+                                </td>
+
+                                <td class="text-end">
+                                    @detalle.IVA.ToString("N2") %
+                                </td>
+
+                                <td class="text-end">
+                                    @detalle.Subtotal.ToString("C2")
+                                </td>
+
+                            </tr>
+                        }
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+
+        <!-- INFORMACIÓN FINAL -->
+        <div class="row g-4">
+
+            <!-- PAGO / NOTA -->
+            <div class="col-lg-6">
+
+                <div class="invoice-payment-info">
+
+                    <div class="detail-label">
+                        Método de pago
+                    </div>
+
+                    <div class="detail-value mb-4">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.MetodoPago))
+                        {
+                            @Model.MetodoPago
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No especificado
+                            </span>
+                        }
+
+                    </div>
+
+
+                    @if (!string.IsNullOrWhiteSpace(Model.Nota))
+                    {
+                        <div class="detail-label">
+                            Nota
+                        </div>
+
+                        <div class="invoice-note">
+                            @Model.Nota
+                        </div>
+                    }
+
+                </div>
+
+            </div>
+
+
+            <!-- TOTALES -->
+            <div class="col-lg-6">
+
+                <div class="payment-summary">
+
+                    <div class="payment-summary-row">
+
+                        <span>
+                            Subtotal
+                        </span>
+
+                        <strong>
+                            @Model.Subtotal.ToString("C2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-summary-row">
+
+                        <span>
+                            IVA
+                        </span>
+
+                        <strong>
+                            @Model.TotalIVA.ToString("C2")
+                        </strong>
+
+                    </div>
+
+
+                    <div class="payment-summary-total">
+
+                        <span>
+                            Total
+                        </span>
+
+                        <strong>
+                            @Model.Total.ToString("C2")
+                        </strong>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PIE -->
+        <div class="invoice-footer-text mt-5">
+
+            <hr />
+
+            <p class="text-center text-muted mb-0">
+                Comprobante generado por SistemaFacturacion
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- ACCIONES -->
+<div class="form-actions mt-4 no-print">
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a Facturas
+    </a>
+
+    @if (Model.Activa)
+    {
+        <button type="button"
+                class="btn btn-primary"
+                onclick="window.print()">
+            Imprimir / Guardar PDF
+        </button>
+    }
+
+</div>

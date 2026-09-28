@@ -1,0 +1,238 @@
+@model SistemaFacturacion.Models.Producto
+
+@{
+    ViewData["Title"] = "Dar de baja Producto";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Dar de baja Producto
+        </h1>
+
+        <p class="text-muted mb-0">
+            Confirmación de baja del producto
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a Productos
+    </a>
+
+</div>
+
+
+<!-- ADVERTENCIA -->
+<div class="alert alert-danger mb-4">
+
+    <div class="d-flex align-items-start gap-3">
+
+        <div class="deactivation-warning-icon">
+            !
+        </div>
+
+        <div>
+
+            <strong>
+                ¿Está seguro que desea dar de baja este producto?
+            </strong>
+
+            <div class="mt-1">
+                El producto quedará inactivo y dejará de estar disponible
+                para nuevas facturas. Podrá volver a darse de alta
+                posteriormente.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- DATOS DEL PRODUCTO -->
+<div class="card">
+
+    <div class="card-header py-3">
+        <strong>
+            Producto seleccionado
+        </strong>
+    </div>
+
+    <div class="card-body p-4">
+
+        <!-- INFORMACIÓN DEL PRODUCTO -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Información del producto
+            </h5>
+
+            <p class="text-muted form-section-description">
+                Verifique que este sea el producto que desea dar de baja.
+            </p>
+
+            <div class="row g-4">
+
+                <!-- CÓDIGO -->
+                <div class="col-md-4">
+
+                    <div class="detail-label">
+                        Código
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.Codigo
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPCIÓN -->
+                <div class="col-md-8">
+
+                    <div class="detail-label">
+                        Descripción
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.Descripcion
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- PRECIO E IMPUESTOS -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Precio e impuestos
+            </h5>
+
+            <div class="row g-4 mt-1">
+
+                <!-- PRECIO -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Precio
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.Precio.ToString("C2")
+                    </div>
+
+                </div>
+
+
+                <!-- IVA -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        IVA
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.IVA.ToString("N2") %
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- INFORMACIÓN DEL SISTEMA -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Información del sistema
+            </h5>
+
+            <div class="row g-4 mt-1">
+
+                <!-- FECHA DE ALTA -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Fecha de alta
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.FechaAlta.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+
+
+                <!-- ESTADO -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Estado actual
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (Model.Activo)
+                        {
+                            <span class="badge bg-success-subtle text-success">
+                                Activo
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger-subtle text-danger">
+                                Inactivo
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- CONFIRMACIÓN -->
+        <form asp-action="Delete"
+              method="post">
+
+            <input type="hidden"
+                   asp-for="Id" />
+
+            <div class="form-actions mt-4">
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+                <button type="submit"
+                        class="btn btn-danger">
+                    Dar de baja Producto
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

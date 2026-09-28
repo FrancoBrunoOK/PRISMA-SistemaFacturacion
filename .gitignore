@@ -1,0 +1,40 @@
+# =========================================================
+# PRISMA - Archivos ignorados por Git
+# =========================================================
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.rsuser
+*.userosscache
+*.sln.docstates
+
+# Compilación .NET
+**/bin/
+**/obj/
+
+# Configuración local de cada desarrollador
+**/appsettings.Development.json
+**/appsettings.Local.json
+**/appsettings.*.local.json
+
+# Secretos y certificados
+**/secrets.json
+*.pfx
+*.p12
+
+# Logs
+*.log
+logs/
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Archivos del sistema operativo
+.DS_Store
+Thumbs.db
+
+# Publicaciones
+publish/

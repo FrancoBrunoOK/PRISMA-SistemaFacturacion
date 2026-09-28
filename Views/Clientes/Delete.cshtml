@@ -1,0 +1,269 @@
+@model SistemaFacturacion.Models.Cliente
+
+@{
+    ViewData["Title"] = "Dar de baja Cliente";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Dar de baja Cliente
+        </h1>
+
+        <p class="text-muted mb-0">
+            Confirmación de baja del cliente
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a Clientes
+    </a>
+
+</div>
+
+
+<!-- ADVERTENCIA -->
+<div class="alert alert-danger mb-4">
+
+    <div class="d-flex align-items-start gap-3">
+
+        <div class="deactivation-warning-icon">
+            !
+        </div>
+
+        <div>
+
+            <strong>
+                ¿Está seguro que desea dar de baja este cliente?
+            </strong>
+
+            <div class="mt-1">
+                El cliente quedará inactivo y dejará de estar disponible
+                para nuevas operaciones. Podrá volver a darse de alta
+                posteriormente.
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- DATOS DEL CLIENTE -->
+<div class="card">
+
+    <div class="card-header py-3">
+        <strong>
+            Cliente seleccionado
+        </strong>
+    </div>
+
+    <div class="card-body p-4">
+
+        <!-- DATOS PRINCIPALES -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Datos principales
+            </h5>
+
+            <p class="text-muted form-section-description">
+                Verifique que este sea el cliente que desea dar de baja.
+            </p>
+
+            <div class="row g-4">
+
+                <!-- NOMBRE -->
+                <div class="col-md-4">
+
+                    <div class="detail-label">
+                        Nombre
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.Nombre
+                    </div>
+
+                </div>
+
+
+                <!-- CUIT -->
+                <div class="col-md-4">
+
+                    <div class="detail-label">
+                        CUIT
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.CUIT))
+                        {
+                            @Model.CUIT
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- DNI -->
+                <div class="col-md-4">
+
+                    <div class="detail-label">
+                        DNI
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.DNI))
+                        {
+                            @Model.DNI
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- CONTACTO -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Información de contacto
+            </h5>
+
+            <div class="row g-4">
+
+                <!-- TELÉFONO -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Teléfono
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Telefono))
+                        {
+                            @Model.Telefono
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+
+                <!-- EMAIL -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Email
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (!string.IsNullOrWhiteSpace(Model.Email))
+                        {
+                            @Model.Email
+                        }
+                        else
+                        {
+                            <span class="text-muted">
+                                No informado
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- ESTADO -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Estado actual
+            </h5>
+
+            <div class="mt-3">
+
+                @if (Model.Activo)
+                {
+                    <span class="badge bg-success-subtle text-success">
+                        Activo
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger-subtle text-danger">
+                        Inactivo
+                    </span>
+                }
+
+            </div>
+
+        </div>
+
+
+        <!-- CONFIRMACIÓN -->
+        <form asp-action="Delete"
+              method="post">
+
+            <input type="hidden"
+                   asp-for="Id" />
+
+            <div class="form-actions mt-4">
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+                <button type="submit"
+                        class="btn btn-danger">
+                    Dar de baja Cliente
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>

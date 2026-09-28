@@ -1,0 +1,233 @@
+@model SistemaFacturacion.Models.Producto
+
+@{
+    ViewData["Title"] = "Detalle del Producto";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">
+            Detalle del Producto
+        </h1>
+
+        <p class="text-muted mb-0">
+            Información registrada del producto
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver a productos
+    </a>
+
+</div>
+
+
+<!-- INFORMACIÓN DEL PRODUCTO -->
+<div class="card">
+
+    <div class="card-body p-4">
+
+        <!-- DATOS PRINCIPALES -->
+        <div class="form-section">
+
+            <div class="d-flex justify-content-between
+                align-items-start
+                flex-wrap
+                gap-3
+                mb-3">
+
+                <div>
+
+                    <h5 class="form-section-title">
+                        Información del producto
+                    </h5>
+
+                    <p class="text-muted form-section-description mb-0">
+                        Datos principales del producto dentro del catálogo.
+                    </p>
+
+                </div>
+
+                @if (Model.Activo)
+                {
+                    <span class="badge bg-success-subtle text-success">
+                        Activo
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-danger-subtle text-danger">
+                        Inactivo
+                    </span>
+                }
+
+            </div>
+
+
+            <div class="row g-4">
+
+                <!-- CÓDIGO -->
+                <div class="col-md-4">
+
+                    <div class="detail-label">
+                        Código
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.Codigo
+                    </div>
+
+                </div>
+
+
+                <!-- DESCRIPCIÓN -->
+                <div class="col-md-8">
+
+                    <div class="detail-label">
+                        Descripción
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.Descripcion
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- PRECIO E IMPUESTOS -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Precio e impuestos
+            </h5>
+
+            <p class="text-muted form-section-description">
+                Valores utilizados al incluir el producto en una factura.
+            </p>
+
+
+            <div class="row g-4">
+
+                <!-- PRECIO -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Precio unitario
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.Precio.ToString("C2")
+                    </div>
+
+                </div>
+
+
+                <!-- IVA -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        IVA
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.IVA.ToString("N2") %
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <hr class="my-4" />
+
+
+        <!-- INFORMACIÓN DEL SISTEMA -->
+        <div class="form-section">
+
+            <h5 class="form-section-title">
+                Información del sistema
+            </h5>
+
+            <p class="text-muted form-section-description">
+                Datos administrados automáticamente por el sistema.
+            </p>
+
+
+            <div class="row g-4">
+
+                <!-- FECHA DE ALTA -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Fecha de alta
+                    </div>
+
+                    <div class="detail-value">
+                        @Model.FechaAlta.ToString("dd/MM/yyyy HH:mm")
+                    </div>
+
+                </div>
+
+
+                <!-- ESTADO -->
+                <div class="col-md-6">
+
+                    <div class="detail-label">
+                        Estado
+                    </div>
+
+                    <div class="detail-value">
+
+                        @if (Model.Activo)
+                        {
+                            <span class="badge bg-success-subtle text-success">
+                                Activo
+                            </span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger-subtle text-danger">
+                                Inactivo
+                            </span>
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ACCIONES -->
+        <div class="form-actions mt-4">
+
+            <a asp-action="Index"
+               class="btn btn-outline-secondary">
+                Volver
+            </a>
+
+            <a asp-action="Edit"
+               asp-route-id="@Model.Id"
+               class="btn btn-primary">
+                Editar Producto
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
