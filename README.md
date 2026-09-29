@@ -686,7 +686,7 @@ En Visual Studio se debe contar con las herramientas necesarias para desarrollo 
 Desde una terminal:
 
 ```bash
-git clone https://github.com/TU-USUARIO/PRISMA-SistemaFacturacion.git
+git clone https://github.com/FrancoBrunoOK/PRISMA-SistemaFacturacion.git
 ```
 
 Ingresar a la carpeta:
