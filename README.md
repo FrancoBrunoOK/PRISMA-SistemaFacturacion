@@ -6,7 +6,7 @@ PRISMA es una aplicación web desarrollada como proyecto académico para la gest
 
 El sistema permite administrar la información necesaria para realizar un ciclo completo de facturación, desde el registro de clientes y productos hasta la generación, consulta y anulación de facturas.
 
-La aplicación fue desarrollada utilizando ASP.NET Core MVC, Entity Framework Core y SQL Server, aplicando una arquitectura basada en el patrón Modelo-Vista-Controlador (MVC).
+Desarrollada con **ASP.NET Core MVC**, **Entity Framework Core** y **SQL Server**, siguiendo el patrón **Modelo-Vista-Controlador (MVC)**.
 
 ---
 
@@ -20,57 +20,54 @@ La aplicación fue desarrollada utilizando ASP.NET Core MVC, Entity Framework Co
 
 ---
 
-## Objetivo del proyecto
+## Índice
 
-El objetivo de PRISMA es desarrollar una aplicación web que permita gestionar de forma centralizada las principales operaciones relacionadas con un proceso de facturación.
-
-El sistema permite:
-
-- Administrar clientes.
-- Administrar un catálogo de productos.
-- Registrar precios e IVA de los productos.
-- Generar facturas.
-- Incorporar múltiples productos a una factura.
-- Definir cantidades para cada producto.
-- Calcular automáticamente subtotales e IVA.
-- Calcular el total final de una factura.
-- Registrar un método de pago.
-- Incorporar notas u observaciones.
-- Consultar el historial de facturas emitidas.
-- Buscar y filtrar información.
-- Anular facturas sin eliminarlas físicamente.
-- Imprimir una factura o guardarla como PDF.
-- Consultar indicadores generales desde un panel de control.
+- [Características](#características)
+- [Tecnologías](#tecnologías)
+- [Arquitectura](#arquitectura)
+- [Base de datos](#base-de-datos)
+- [Entidades principales](#entidades-principales)
+- [Módulos del sistema](#módulos-del-sistema)
+- [Conceptos aplicados](#conceptos-aplicados)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [Requisitos para ejecutar el proyecto](#requisitos-para-ejecutar-el-proyecto)
+- [Instalación](#instalación)
+- [Datos de prueba](#datos-de-prueba)
+- [Trabajo colaborativo con Git](#trabajo-colaborativo-con-git)
+- [Flujo general de uso](#flujo-general-de-uso)
+- [Estado del proyecto](#estado-del-proyecto)
 
 ---
 
-# Tecnologías utilizadas
+## Características
 
-## Backend
+- Administración de clientes (alta, edición, baja lógica y reactivación)
+- Catálogo de productos con precio e IVA
+- Facturación en 4 pasos:
+  1. Selección de cliente
+  2. Agregado de productos y cantidades
+  3. Resumen y método de pago
+  4. Generación del comprobante
+- Cálculo automático de subtotales, IVA y total
+- Métodos de pago (Efectivo, Débito, Crédito, QR)
+- Notas / observaciones en la factura
+- Historial de facturas con búsqueda y filtros
+- Anulación lógica de facturas (sin eliminación física)
+- Dashboard con indicadores generales
+- Impresión / guardado como PDF desde el navegador
+- **Datos de prueba cargados automáticamente** al iniciar la aplicación (si la base está vacía)
 
-- C#
-- .NET 10
-- ASP.NET Core MVC
-- Entity Framework Core 10
+---
 
-## Base de datos
+## Tecnologías
 
-- Microsoft SQL Server
-- SQL Server Management Studio (SSMS)
-
-## Frontend
-
-- HTML
-- CSS
-- Razor Views
-- Bootstrap
-- JavaScript
-
-## Herramientas de desarrollo
-
-- Visual Studio 2026
-- Git
-- GitHub
+| Capa            | Tecnología                              |
+|-----------------|-----------------------------------------|
+| Backend         | C# · .NET 10 · ASP.NET Core MVC         |
+| ORM             | Entity Framework Core 10                |
+| Base de datos   | Microsoft SQL Server                    |
+| Frontend        | Razor Views · HTML · CSS · Bootstrap · JavaScript |
+| Herramientas    | Visual Studio · Git · GitHub            |
 
 ---
 
@@ -130,7 +127,7 @@ Views/
 └── Shared/
 ```
 
-Las vistas fueron desarrolladas utilizando Razor, HTML, Bootstrap y CSS.
+Las vistas fueron desarrolladas utilizando Razor, HTML, Bootstrap y CSS. La plantilla común (menú, pie de página y scripts) se define en `Views/Shared/_Layout.cshtml`.
 
 ## Controllers
 
@@ -142,6 +139,18 @@ Los principales controladores son:
 - ClientesController
 - ProductosController
 - FacturasController
+
+## Data
+
+La carpeta `Data/` contiene:
+
+- `ApplicationDbContext`: contexto de Entity Framework Core que representa la conexión con la base de datos y sus tablas.
+- `DbInitializer`: carga datos de prueba al iniciar la aplicación cuando la base está vacía.
+
+## Extensions
+
+La carpeta `Extensions/` contiene `SessionExtensions`, métodos de extensión que permiten guardar y recuperar objetos completos en la sesión (serializándolos como JSON). Se utilizan durante el armado de una factura.
+
 
 ## Entity Framework Core
 
@@ -241,7 +250,7 @@ Contiene:
 - Código
 - Descripción
 - Precio
-- IVA
+- IVA (21 % por defecto)
 - Estado
 - Fecha de alta
 
@@ -265,6 +274,8 @@ Contiene información como:
 - Nota
 - Estado
 
+El número de factura se genera automáticamente a partir del identificador del registro, con 8 dígitos (por ejemplo, `00000042`).
+
 Una factura puede encontrarse activa o anulada.
 
 ---
@@ -283,7 +294,7 @@ Almacena:
 - Subtotal
 - Importe de IVA
 
-Esto permite conservar la información correspondiente a cada línea de la factura.
+Los datos del producto (descripción, precio e IVA) se copian al momento de facturar. Esto permite conservar la información correspondiente a cada línea de la factura aunque el producto se modifique más adelante.
 
 ---
 
@@ -328,8 +339,8 @@ El módulo permite:
 - Crear productos.
 - Editar productos.
 - Consultar detalles.
-- Buscar productos.
-- Filtrar por estado.
+- Buscar productos por código o descripción.
+- Filtrar por estado (activos, inactivos o todos).
 - Definir precio.
 - Definir porcentaje de IVA.
 - Dar de baja productos.
@@ -351,17 +362,19 @@ El proceso de creación de una factura está dividido en cuatro etapas:
 4. Factura
 ```
 
+Mientras la factura se arma (pasos 1 a 3), los datos se conservan temporalmente en la sesión. Recién al confirmar (paso 4) se guardan en la base de datos.
+
+
 ### Paso 1 - Cliente
 
-Se selecciona el cliente al cual se emitirá la factura.
+Se selecciona el cliente al cual se emitirá la factura. Solo se pueden elegir clientes activos.
 
 ### Paso 2 - Productos
 
 Se seleccionan uno o más productos.
 
-Para cada producto se puede establecer una cantidad.
-
-El sistema calcula los subtotales correspondientes.
+Para cada producto se puede establecer una cantidad. Si un producto se agrega más de una vez, las cantidades se acumulan en una única línea. 
+También es posible quitar productos agregados.
 
 ### Paso 3 - Resumen
 
@@ -388,6 +401,8 @@ Los métodos de pago disponibles son:
 ### Paso 4 - Factura
 
 Una vez confirmada la operación se genera el comprobante final.
+
+La factura y sus detalles se guardan en una única transacción de base de datos.
 
 La factura contiene:
 
@@ -436,6 +451,8 @@ Una factura anulada continúa disponible para consulta, pero queda identificada 
 ```text
 FACTURA ANULADA
 ```
+
+Las facturas anuladas no se incluyen en el total facturado del dashboard.
 
 ---
 
@@ -492,7 +509,7 @@ El proyecto incluye la carpeta:
 Migrations/
 ```
 
-Por este motivo no es necesario crear manualmente todas las tablas al instalar el proyecto en otra computadora.
+Por este motivo no es necesario crear manualmente todas las tablas al instalar el proyecto en otra computadora: alcanza con ejecutar `Update-Database`.
 
 ---
 
@@ -584,20 +601,23 @@ El proceso conserva información como:
 - Nota.
 - Totales.
 
+Los objetos se guardan serializados como JSON mediante los métodos de `SessionExtensions`.
+
 Al finalizar la factura, la información definitiva se almacena en SQL Server.
 
 ---
 
 ## Validación
 
-Se utilizan validaciones tanto del lado de ASP.NET Core como controles HTML para evitar determinadas entradas inválidas.
+Se utilizan validaciones tanto del lado del servidor (ASP.NET Core) como del navegador (HTML y jQuery Validation).
 
 Por ejemplo:
 
-- Selección obligatoria de cliente.
-- Selección obligatoria del método de pago.
+- Campos obligatorios en los formularios de clientes y productos (validados en el navegador y nuevamente en el servidor con `ModelState`).
+- Selección obligatoria de cliente (validada en el servidor).
+- Selección obligatoria del método de pago (atributo `required` del formulario).
 - Cantidades de productos.
-- Validaciones de formularios.
+- Tokens antiforgery en los formularios que envían datos.
 
 ---
 
@@ -605,9 +625,9 @@ Por ejemplo:
 
 Durante la confirmación de una factura se utiliza una transacción de base de datos.
 
-Esto permite tratar la creación de la factura y sus detalles como una operación consistente.
+Esto permite tratar la creación de la factura, sus detalles y su número como una operación consistente.
 
-Si ocurre un error durante el proceso, la transacción puede revertirse.
+Si ocurre un error durante el proceso, la transacción se revierte.
 
 ---
 
@@ -633,7 +653,11 @@ SistemaFacturacion/
 │   └── ProductosController.cs
 │
 ├── Data/
-│   └── ApplicationDbContext.cs
+│   ├── ApplicationDbContext.cs
+│   └── DbInitializer.cs          # Seed de datos de prueba
+│
+├── Extensions/
+│   └── SessionExtensions.cs      # Guardar/leer objetos en Session (JSON)
 │
 ├── Migrations/
 │
@@ -644,7 +668,11 @@ SistemaFacturacion/
 │   ├── DetalleFactura.cs
 │   ├── NuevaFacturaViewModel.cs
 │   ├── DetalleFacturaViewModel.cs
-│   └── DashboardViewModel.cs
+│   ├── DashboardViewModel.cs
+│   └── ErrorViewModel.cs
+│
+├── Properties/
+│   └── launchSettings.json       # Puertos y perfiles de ejecución
 │
 ├── Views/
 │   ├── Clientes/
@@ -663,6 +691,7 @@ SistemaFacturacion/
 └── SistemaFacturacion.csproj
 ```
 
+
 ---
 
 # Requisitos para ejecutar el proyecto
@@ -671,7 +700,7 @@ Antes de ejecutar PRISMA se recomienda tener instalado:
 
 - Visual Studio 2026 o una versión compatible.
 - .NET 10 SDK.
-- SQL Server.
+- SQL Server (por ejemplo, SQL Server Express).
 - SQL Server Management Studio.
 - Git, si se desea clonar el repositorio.
 
@@ -686,7 +715,7 @@ En Visual Studio se debe contar con las herramientas necesarias para desarrollo 
 Desde una terminal:
 
 ```bash
-git clone https://github.com/TU-USUARIO/PRISMA-SistemaFacturacion.git
+git clone https://github.com/FrancoBrunoOK/PRISMA-SistemaFacturacion.git
 ```
 
 Ingresar a la carpeta:
@@ -701,29 +730,20 @@ También puede clonarse directamente utilizando Visual Studio.
 
 ## 2. Abrir la solución
 
-Abrir el archivo de solución del proyecto con Visual Studio.
-
-Por ejemplo:
+Abrir el archivo de solución del proyecto con Visual Studio:
 
 ```text
-SistemaFacturacion.sln
+SistemaFacturacion.slnx
 ```
+
+El formato `.slnx` es el formato de solución más nuevo de Visual Studio. Si la versión instalada no puede abrirlo, 
+el proyecto también puede abrirse directamente desde `SistemaFacturacion.csproj` o ejecutarse desde la terminal.
 
 ---
 
 ## 3. Configurar SQL Server
 
-Cada desarrollador puede utilizar su propia instancia local de SQL Server.
-
-Crear un archivo:
-
-```text
-appsettings.Development.json
-```
-
-y configurar la conexión correspondiente.
-
-Ejemplo utilizando SQL Server Express:
+El proyecto ya incluye en `appsettings.json` una cadena de conexión que apunta a una instancia local de SQL Server Express:
 
 ```json
 {
@@ -732,6 +752,24 @@ Ejemplo utilizando SQL Server Express:
   }
 }
 ```
+
+Si la instancia de SQL Server de tu computadora tiene otro nombre, no hace falta modificar `appsettings.json`. Lo recomendable es crear un archivo propio:
+
+```text
+appsettings.Development.json
+```
+
+en la misma carpeta que `appsettings.json`, con la conexión correspondiente:
+
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=NOMBRE-PC\\SQLEXPRESS;Database=FacturacionDB;Trusted_Connection=True;TrustServerCertificate=True;"
+  }
+}
+```
+
+Este archivo está incluido en `.gitignore`, por lo que cada integrante puede tener su propia configuración sin subirla al repositorio.
 
 El nombre de la instancia puede variar según la computadora.
 
@@ -777,6 +815,14 @@ Update-Database
 
 Entity Framework utilizará las migraciones existentes para crear la base de datos y sus tablas.
 
+Este paso debe hacerse **antes** de ejecutar la aplicación por primera vez, ya que la carga de datos de prueba necesita que las tablas ya existan.
+
+Alternativa desde terminal (requiere la herramienta `dotnet-ef`):
+
+```bash
+dotnet ef database update
+```
+
 ---
 
 ## 6. Ejecutar la aplicación
@@ -793,13 +839,50 @@ o:
 Ctrl + F5
 ```
 
-También puede ejecutarse desde terminal:
+También puede ejecutarse desde terminal, parado en la carpeta del proyecto:
 
 ```bash
 dotnet run
 ```
 
 La aplicación se abrirá en el navegador utilizando la dirección local configurada por ASP.NET Core.
+
+---
+
+# Datos de prueba
+
+Al iniciar la aplicación, `Program.cs` ejecuta `DbInitializer`, que carga datos de ejemplo para poder probar el sistema sin tener que cargarlos a mano.
+
+**La carga se realiza solo si las tablas `Clientes` y `Productos` están vacías.** Si ya existen datos, no se modifica nada, por lo que es seguro reiniciar la aplicación.
+
+| Entidad   | Cantidad | Detalle |
+|-----------|----------|---------|
+| Clientes  | 10       | 9 activos y 1 inactivo (baja lógica de ejemplo). Incluye empresas (con CUIT) y personas (con DNI) de distintas provincias |
+| Productos | 12       | 11 activos y 1 inactivo. Artículos de tecnología con IVA del 21 % |
+| Facturas  | 5        | 4 activas y 1 anulada, con distintos métodos de pago y notas |
+
+Con la base recién cargada, el dashboard debería mostrar:
+
+| Indicador            | Valor esperado |
+|----------------------|----------------|
+| Clientes activos     | 9              |
+| Productos activos    | 11             |
+| Facturas activas     | 4              |
+| Facturas anuladas    | 1              |
+| Total facturado      | $ 2.550.377,50 |
+
+Si ocurre un error durante la carga (por ejemplo, porque todavía no se ejecutó `Update-Database`), la aplicación no se detiene: el error queda registrado en el log con el mensaje "Error al cargar datos de prueba".
+
+## Volver a cargar los datos de prueba
+
+Para empezar de cero, eliminar la base y volver a crearla desde la Package Manager Console:
+
+```powershell
+Drop-Database
+Update-Database
+```
+
+Al volver a ejecutar la aplicación, los datos de prueba se cargan nuevamente.
 
 ---
 
@@ -871,6 +954,20 @@ PRISMA cuenta actualmente con los módulos principales necesarios para realizar 
 - Anulación de facturas.
 - Dashboard.
 - Impresión de comprobantes.
+- Datos de prueba iniciales.
+
+---
+
+## Mejoras futuras
+
+Ideas de evolución del sistema:
+
+- **Usabilidad** → Paginado en listados
+- **Usabilidad** → Mejoras y ampliación de filtros
+- **Seguridad** → Login con roles (Superusuario / Usuario)
+- **Arquitectura** → Separar frontend con React + Expo
+- **Pagos** → Integración de pasarela de pago real
+- **Automatización** → Envío de factura por WhatsApp
 
 ---
 
@@ -895,3 +992,8 @@ Proyecto desarrollado por:
 - Lobera, Pastorino Mateo
 - Oviedo, Danilo
 - Torres Oliva, Héctor Gabriel
+
+---
+
+# Licencia
+Proyecto académico de uso libre con fines educativos.

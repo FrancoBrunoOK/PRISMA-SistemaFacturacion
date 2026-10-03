@@ -24,6 +24,7 @@
         // Nota opcional
         public string? Nota { get; set; }
 
+        //Forma de pago
         public string MetodoPago { get; set; } = string.Empty;
 
         // Estado de la factura

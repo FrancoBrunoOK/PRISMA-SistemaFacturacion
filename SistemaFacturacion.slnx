@@ -1,7 +1,3 @@
 <Solution>
-  <Folder Name="/Elementos de la solución/">
-    <File Path=".gitignore" />
-    <File Path="README.md" />
-  </Folder>
-  <Project Path="SistemaFacturacion/SistemaFacturacion.csproj" />
+  <Project Path="SistemaFacturacion.csproj" />
 </Solution>
