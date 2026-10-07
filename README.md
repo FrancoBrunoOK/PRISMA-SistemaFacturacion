@@ -960,15 +960,14 @@ PRISMA cuenta actualmente con los módulos principales necesarios para realizar 
 
 ## Mejoras futuras
 
-Ideas de evolución del sistema:
+Estado de evolución del sistema:
 
-- **Usabilidad** → Paginado en listados
-- **Usabilidad** → Mejoras y ampliación de filtros
-- **Seguridad** → Login con roles (Superusuario / Usuario)
-- **Arquitectura** → Separar frontend con React + Expo
-- **Pagos** → Integración de pasarela de pago real
-- **Automatización** → Envío de factura por WhatsApp
-
+- [x] **Usabilidad** → Paginado en listados
+- [x] **Usabilidad** → Mejoras y ampliación de filtros
+- [ ] **Seguridad** → Login con roles (Superusuario / Usuario)
+- [ ] **Arquitectura** → Separar frontend con React + Expo
+- [ ] **Pagos** → Integración de pasarela de pago real
+- [ ] **Automatización** → Envío de factura por WhatsApp
 ---
 
 # Alcance
