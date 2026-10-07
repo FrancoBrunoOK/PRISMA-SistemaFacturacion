@@ -317,3 +317,110 @@
     </div>
 
 </div>
+
+
+<!-- PAGINACIÓN -->
+@{
+    int paginaActual = ViewBag.PaginaActual;
+    int totalPaginas = ViewBag.TotalPaginas;
+    int totalRegistros = ViewBag.TotalRegistros;
+    int tamanioPagina = ViewBag.TamanioPagina;
+
+    int desde = totalRegistros == 0
+        ? 0
+        : ((paginaActual - 1) * tamanioPagina) + 1;
+
+    int hasta = Math.Min(
+        paginaActual * tamanioPagina,
+        totalRegistros);
+}
+
+@if (totalRegistros > 0)
+{
+    <div class="d-flex flex-column flex-md-row
+        justify-content-between align-items-center
+        gap-3 mt-4">
+
+        <!-- INFORMACIÓN -->
+        <div class="text-muted small">
+
+            Mostrando
+            <strong>@desde</strong>
+            -
+            <strong>@hasta</strong>
+            de
+            <strong>@totalRegistros</strong>
+            productos
+
+        </div>
+
+
+        <!-- PAGINACIÓN -->
+        @if (totalPaginas > 1)
+        {
+            <nav aria-label="Paginación de productos">
+
+                <ul class="pagination mb-0">
+
+                    <!-- ANTERIOR -->
+                    <li class="page-item
+                        @(paginaActual == 1 ? "disabled" : "")">
+
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-pagina="@(paginaActual - 1)"
+                           asp-route-filtroEstado="@ViewBag.FiltroEstado"
+                           asp-route-buscar="@ViewBag.Buscar">
+
+                            Anterior
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- NÚMEROS DE PÁGINA -->
+                    @for (int i = 1; i <= totalPaginas; i++)
+                    {
+                        <li class="page-item
+                            @(i == paginaActual ? "active" : "")">
+
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-pagina="@i"
+                               asp-route-filtroEstado="@ViewBag.FiltroEstado"
+                               asp-route-buscar="@ViewBag.Buscar">
+
+                                @i
+
+                            </a>
+
+                        </li>
+                    }
+
+
+                    <!-- SIGUIENTE -->
+                    <li class="page-item
+                        @(paginaActual == totalPaginas
+                            ? "disabled"
+                            : "")">
+
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-pagina="@(paginaActual + 1)"
+                           asp-route-filtroEstado="@ViewBag.FiltroEstado"
+                           asp-route-buscar="@ViewBag.Buscar">
+
+                            Siguiente
+
+                        </a>
+
+                    </li>
+
+                </ul>
+
+            </nav>
+        }
+
+    </div>
+}

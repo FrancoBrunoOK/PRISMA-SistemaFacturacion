@@ -14,36 +14,81 @@ public class ProductosController : Controller
     }
 
     // GET: PRODUCTOS
+    // GET: PRODUCTOS
     public async Task<IActionResult> Index(
-    string filtroEstado = "Activos",
-    string buscar = "")
+        string filtroEstado = "Activos",
+        string buscar = "",
+        int pagina = 1)
     {
+        const int tamanioPagina = 10;
+
         var productos = _context.Productos.AsQueryable();
 
-        // Filtrar por estado
+        // =========================
+        // FILTRO POR ESTADO
+        // =========================
         if (filtroEstado == "Activos")
         {
-            productos = productos.Where(p => p.Activo == true);
+            productos = productos.Where(p => p.Activo);
         }
         else if (filtroEstado == "Inactivos")
         {
-            productos = productos.Where(p => p.Activo == false);
+            productos = productos.Where(p => !p.Activo);
         }
 
-        // Buscar por código o descripción
+        // =========================
+        // BÚSQUEDA
+        // =========================
         if (!string.IsNullOrWhiteSpace(buscar))
         {
+            buscar = buscar.Trim();
+
             productos = productos.Where(p =>
                 p.Codigo.Contains(buscar) ||
                 p.Descripcion.Contains(buscar));
         }
 
+        // =========================
+        // ORDEN
+        // =========================
         productos = productos.OrderBy(p => p.Descripcion);
 
+        // =========================
+        // PAGINADO
+        // =========================
+        var totalRegistros = await productos.CountAsync();
+
+        var totalPaginas = (int)Math.Ceiling(
+            totalRegistros / (double)tamanioPagina);
+
+        // Evita páginas inválidas
+        if (pagina < 1)
+        {
+            pagina = 1;
+        }
+
+        if (totalPaginas > 0 && pagina > totalPaginas)
+        {
+            pagina = totalPaginas;
+        }
+
+        var productosPaginados = await productos
+            .Skip((pagina - 1) * tamanioPagina)
+            .Take(tamanioPagina)
+            .ToListAsync();
+
+        // =========================
+        // DATOS PARA LA VISTA
+        // =========================
         ViewBag.FiltroEstado = filtroEstado;
         ViewBag.Buscar = buscar;
 
-        return View(await productos.ToListAsync());
+        ViewBag.PaginaActual = pagina;
+        ViewBag.TotalPaginas = totalPaginas;
+        ViewBag.TotalRegistros = totalRegistros;
+        ViewBag.TamanioPagina = tamanioPagina;
+
+        return View(productosPaginados);
     }
 
     // GET: PRODUCTOS/Details/5

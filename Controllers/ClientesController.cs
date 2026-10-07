@@ -14,33 +14,83 @@ public class ClientesController : Controller
     }
 
     // GET: CLIENTES
-    public async Task<IActionResult> Index(string filtroEstado = "Activos", string buscar = "")
+    public async Task<IActionResult> Index(
+        string filtroEstado = "Activos",
+        string buscar = "",
+        int pagina = 1)
     {
+        const int tamanioPagina = 10;
+
         var clientes = _context.Clientes.AsQueryable();
 
-        // Filtrar por estado
+        // =========================
+        // FILTRO POR ESTADO
+        // =========================
         if (filtroEstado == "Activos")
         {
-            clientes = clientes.Where(c => c.Activo == true);
+            clientes = clientes.Where(c => c.Activo);
         }
         else if (filtroEstado == "Inactivos")
         {
-            clientes = clientes.Where(c => c.Activo == false);
+            clientes = clientes.Where(c => !c.Activo);
         }
 
-        // Buscar por nombre
+        // =========================
+        // BÚSQUEDA
+        // =========================
         if (!string.IsNullOrWhiteSpace(buscar))
         {
+            buscar = buscar.Trim();
+
             clientes = clientes.Where(c =>
-                c.Nombre.Contains(buscar));
+                c.Nombre.Contains(buscar) ||
+                (c.CUIT != null && c.CUIT.Contains(buscar)) ||
+                (c.DNI != null && c.DNI.Contains(buscar)) ||
+                (c.Email != null && c.Email.Contains(buscar)) ||
+                (c.Telefono != null && c.Telefono.Contains(buscar)));
         }
 
+        // =========================
+        // ORDEN
+        // =========================
         clientes = clientes.OrderBy(c => c.Nombre);
 
+        // =========================
+        // PAGINADO
+        // =========================
+        var totalRegistros = await clientes.CountAsync();
+
+        var totalPaginas = (int)Math.Ceiling(
+            totalRegistros / (double)tamanioPagina);
+
+        // Evita páginas inválidas
+        if (pagina < 1)
+        {
+            pagina = 1;
+        }
+
+        if (totalPaginas > 0 && pagina > totalPaginas)
+        {
+            pagina = totalPaginas;
+        }
+
+        var clientesPaginados = await clientes
+            .Skip((pagina - 1) * tamanioPagina)
+            .Take(tamanioPagina)
+            .ToListAsync();
+
+        // =========================
+        // DATOS PARA LA VISTA
+        // =========================
         ViewBag.FiltroEstado = filtroEstado;
         ViewBag.Buscar = buscar;
 
-        return View(await clientes.ToListAsync());
+        ViewBag.PaginaActual = pagina;
+        ViewBag.TotalPaginas = totalPaginas;
+        ViewBag.TotalRegistros = totalRegistros;
+        ViewBag.TamanioPagina = tamanioPagina;
+
+        return View(clientesPaginados);
     }
 
     // GET: CLIENTES/Details/5

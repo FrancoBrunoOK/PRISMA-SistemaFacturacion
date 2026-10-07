@@ -36,7 +36,7 @@
             <div class="row g-3 align-items-end">
 
                 <!-- BUSCADOR -->
-                <div class="col-md-5">
+                <div class="col-md-4">
 
                     <label class="form-label">
                         Buscar factura
@@ -52,7 +52,7 @@
 
 
                 <!-- ESTADO -->
-                <div class="col-md-3">
+                <div class="col-md-2">
 
                     <label class="form-label">
                         Estado
@@ -105,8 +105,88 @@
                 </div>
 
 
+                <!-- MÉTODO DE PAGO -->
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Método de pago
+                    </label>
+
+                    <select name="metodoPago"
+                            class="form-select">
+
+                        @if (ViewBag.MetodoPago == "Todos")
+                        {
+                            <option value="Todos" selected>
+                                Todos
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Todos">
+                                Todos
+                            </option>
+                        }
+
+                        @if (ViewBag.MetodoPago == "Efectivo")
+                        {
+                            <option value="Efectivo" selected>
+                                Efectivo
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Efectivo">
+                                Efectivo
+                            </option>
+                        }
+
+                        @if (ViewBag.MetodoPago == "Tarjeta de débito")
+                        {
+                            <option value="Tarjeta de débito" selected>
+                                Tarjeta de débito
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Tarjeta de débito">
+                                Tarjeta de débito
+                            </option>
+                        }
+
+                        @if (ViewBag.MetodoPago == "Tarjeta de crédito")
+                        {
+                            <option value="Tarjeta de crédito" selected>
+                                Tarjeta de crédito
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Tarjeta de crédito">
+                                Tarjeta de crédito
+                            </option>
+                        }
+
+                        @if (ViewBag.MetodoPago == "Pago con QR")
+                        {
+                            <option value="Pago con QR" selected>
+                                Pago con QR
+                            </option>
+                        }
+                        else
+                        {
+                            <option value="Pago con QR">
+                                Pago con QR
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+
                 <!-- BOTONES -->
-                <div class="col-md-4">
+                <div class="col-md-3">
 
                     <button type="submit"
                             class="btn btn-primary me-2">
@@ -117,6 +197,40 @@
                        class="btn btn-outline-secondary">
                         Limpiar
                     </a>
+
+                </div>
+
+
+                <!-- FECHA DESDE -->
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Desde
+                    </label>
+
+                    <input type="date"
+                           name="desde"
+                           value="@(ViewBag.Desde != null
+                                                   ? ((DateTime)ViewBag.Desde).ToString("yyyy-MM-dd")
+                                                   : "")"
+                           class="form-control" />
+
+                </div>
+
+
+                <!-- FECHA HASTA -->
+                <div class="col-md-3">
+
+                    <label class="form-label">
+                        Hasta
+                    </label>
+
+                    <input type="date"
+                           name="hasta"
+                           value="@(ViewBag.Hasta != null
+                                                   ? ((DateTime)ViewBag.Hasta).ToString("yyyy-MM-dd")
+                                                   : "")"
+                           class="form-control" />
 
                 </div>
 
@@ -164,6 +278,10 @@
 
                         <th class="text-end">
                             Total
+                        </th>
+
+                        <th>
+                            Método de pago
                         </th>
 
                         <th>
@@ -243,6 +361,23 @@
                                 </td>
 
 
+                                <!-- MÉTODO DE PAGO -->
+                                <td>
+
+                                    @if (!string.IsNullOrWhiteSpace(factura.MetodoPago))
+                                    {
+                                        <span>
+                                            @factura.MetodoPago
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted">
+                                            —
+                                        </span>
+                                    }
+
+
                                 <!-- ESTADO -->
                                 <td>
 
@@ -305,7 +440,7 @@
                     {
                         <tr>
 
-                            <td colspan="8"
+                            <td colspan="9"
                                 class="text-center py-5">
 
                                 <div class="empty-table">
@@ -334,3 +469,131 @@
     </div>
 
 </div>
+
+
+<!-- PAGINACIÓN -->
+@{
+    int paginaActual = ViewBag.PaginaActual;
+    int totalPaginas = ViewBag.TotalPaginas;
+    int totalRegistros = ViewBag.TotalRegistros;
+    int tamanioPagina = ViewBag.TamanioPagina;
+
+    int desdeRegistro = totalRegistros == 0
+        ? 0
+        : ((paginaActual - 1) * tamanioPagina) + 1;
+
+    int hastaRegistro = Math.Min(
+        paginaActual * tamanioPagina,
+        totalRegistros);
+}
+
+@if (totalRegistros > 0)
+{
+    <div class="d-flex flex-column flex-md-row
+        justify-content-between align-items-center
+        gap-3 mt-4">
+
+        <!-- INFORMACIÓN -->
+        <div class="text-muted small">
+
+            Mostrando
+            <strong>@desdeRegistro</strong>
+            -
+            <strong>@hastaRegistro</strong>
+            de
+            <strong>@totalRegistros</strong>
+            facturas
+
+        </div>
+
+
+        <!-- BOTONES DE PAGINACIÓN -->
+        @if (totalPaginas > 1)
+        {
+            <nav aria-label="Paginación de facturas">
+
+                <ul class="pagination mb-0">
+
+                    <!-- ANTERIOR -->
+                    <li class="page-item
+                        @(paginaActual == 1 ? "disabled" : "")">
+
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-pagina="@(paginaActual - 1)"
+                           asp-route-filtroEstado="@ViewBag.FiltroEstado"
+                           asp-route-buscar="@ViewBag.Buscar"
+                           asp-route-metodoPago="@ViewBag.MetodoPago"
+                           asp-route-desde="@(ViewBag.Desde != null
+                                                          ? ((DateTime)ViewBag.Desde).ToString("yyyy-MM-dd")
+                                                          : "")"
+                           asp-route-hasta="@(ViewBag.Hasta != null
+                                                          ? ((DateTime)ViewBag.Hasta).ToString("yyyy-MM-dd")
+                                                          : "")">
+
+                            Anterior
+
+                        </a>
+
+                    </li>
+
+
+                    <!-- NÚMEROS DE PÁGINA -->
+                    @for (int i = 1; i <= totalPaginas; i++)
+                    {
+                        <li class="page-item
+                            @(i == paginaActual ? "active" : "")">
+
+                            <a class="page-link"
+                               asp-action="Index"
+                               asp-route-pagina="@i"
+                               asp-route-filtroEstado="@ViewBag.FiltroEstado"
+                               asp-route-buscar="@ViewBag.Buscar"
+                               asp-route-metodoPago="@ViewBag.MetodoPago"
+                               asp-route-desde="@(ViewBag.Desde != null
+                                                                  ? ((DateTime)ViewBag.Desde).ToString("yyyy-MM-dd")
+                                                                  : "")"
+                   asp-route-hasta="@(ViewBag.Hasta != null
+                                                      ? ((DateTime)ViewBag.Hasta).ToString("yyyy-MM-dd")
+                                                      : "")">
+
+                    @i
+
+                </a>
+
+            </li>
+        }
+
+
+        <!-- SIGUIENTE -->
+        <li class="page-item
+            @(paginaActual == totalPaginas
+                ? "disabled"
+                : "")">
+
+            <a class="page-link"
+               asp-action="Index"
+               asp-route-pagina="@(paginaActual + 1)"
+               asp-route-filtroEstado="@ViewBag.FiltroEstado"
+               asp-route-buscar="@ViewBag.Buscar"
+               asp-route-metodoPago="@ViewBag.MetodoPago"
+               asp-route-desde="@(ViewBag.Desde != null
+                                              ? ((DateTime)ViewBag.Desde).ToString("yyyy-MM-dd")
+                                              : "")"
+               asp-route-hasta="@(ViewBag.Hasta != null
+                                              ? ((DateTime)ViewBag.Hasta).ToString("yyyy-MM-dd")
+                                              : "")">
+
+                Siguiente
+
+            </a>
+
+        </li>
+
+    </ul>
+
+</nav>
+        }
+
+</div>
+}

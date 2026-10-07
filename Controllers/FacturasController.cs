@@ -21,13 +21,21 @@ namespace SistemaFacturacion.Controllers
 
         public async Task<IActionResult> Index(
             string filtroEstado = "Todas",
-            string buscar = "")
+            string buscar = "",
+            string metodoPago = "Todos",
+            DateTime? desde = null,
+            DateTime? hasta = null,
+            int pagina = 1)
         {
+            const int tamanioPagina = 10;
+
             var facturas = _context.Facturas
                 .Include(f => f.Cliente)
                 .AsQueryable();
 
-            // Filtro por estado
+            // =========================
+            // FILTRO POR ESTADO
+            // =========================
             if (filtroEstado == "Activas")
             {
                 facturas = facturas.Where(f => f.Activa);
@@ -37,22 +45,93 @@ namespace SistemaFacturacion.Controllers
                 facturas = facturas.Where(f => !f.Activa);
             }
 
-            // Búsqueda por número de factura o cliente
+            // =========================
+            // BÚSQUEDA
+            // =========================
             if (!string.IsNullOrWhiteSpace(buscar))
             {
+                buscar = buscar.Trim();
+
                 facturas = facturas.Where(f =>
                     f.Numero.Contains(buscar) ||
                     (f.Cliente != null &&
                      f.Cliente.Nombre.Contains(buscar)));
             }
 
+            // =========================
+            // MÉTODO DE PAGO
+            // =========================
+            if (!string.IsNullOrWhiteSpace(metodoPago) &&
+                metodoPago != "Todos")
+            {
+                facturas = facturas.Where(f =>
+                    f.MetodoPago == metodoPago);
+            }
+
+            // =========================
+            // FECHA DESDE
+            // =========================
+            if (desde.HasValue)
+            {
+                facturas = facturas.Where(f =>
+                    f.FechaEmision >= desde.Value.Date);
+            }
+
+            // =========================
+            // FECHA HASTA
+            // =========================
+            if (hasta.HasValue)
+            {
+                var fechaLimite = hasta.Value.Date.AddDays(1);
+
+                facturas = facturas.Where(f =>
+                    f.FechaEmision < fechaLimite);
+            }
+
+            // =========================
+            // ORDEN
+            // =========================
             facturas = facturas
                 .OrderByDescending(f => f.FechaEmision);
 
+            // =========================
+            // PAGINADO
+            // =========================
+            var totalRegistros = await facturas.CountAsync();
+
+            var totalPaginas = (int)Math.Ceiling(
+                totalRegistros / (double)tamanioPagina);
+
+            if (pagina < 1)
+            {
+                pagina = 1;
+            }
+
+            if (totalPaginas > 0 && pagina > totalPaginas)
+            {
+                pagina = totalPaginas;
+            }
+
+            var facturasPaginadas = await facturas
+                .Skip((pagina - 1) * tamanioPagina)
+                .Take(tamanioPagina)
+                .ToListAsync();
+
+            // =========================
+            // DATOS PARA LA VISTA
+            // =========================
             ViewBag.FiltroEstado = filtroEstado;
             ViewBag.Buscar = buscar;
+            ViewBag.MetodoPago = metodoPago;
+            ViewBag.Desde = desde;
+            ViewBag.Hasta = hasta;
 
-            return View(await facturas.ToListAsync());
+            ViewBag.PaginaActual = pagina;
+            ViewBag.TotalPaginas = totalPaginas;
+            ViewBag.TotalRegistros = totalRegistros;
+            ViewBag.TamanioPagina = tamanioPagina;
+
+            return View(facturasPaginadas);
         }
 
         // =====================================================
