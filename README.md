@@ -51,7 +51,9 @@ Desarrollada con **ASP.NET Core MVC**, **Entity Framework Core** y **SQL Server*
 - Cálculo automático de subtotales, IVA y total
 - Métodos de pago (Efectivo, Débito, Crédito, QR)
 - Notas / observaciones en la factura
-- Historial de facturas con búsqueda y filtros
+- Historial de facturas con búsqueda y filtros por estado, método de pago y fechas
+- Listados de Clientes, Productos y Facturas con paginado de hasta **10 registros por página**
+- Búsquedas ampliadas y filtros combinables en los listados
 - Anulación lógica de facturas (sin eliminación física)
 - Dashboard con indicadores generales
 - Impresión / guardado como PDF desde el navegador
@@ -323,10 +325,12 @@ El módulo permite:
 - Crear clientes.
 - Editar clientes.
 - Consultar detalles.
-- Buscar clientes.
-- Filtrar por estado.
+- Buscar clientes por nombre, CUIT, DNI, email o teléfono.
+- Filtrar por estado (activos, inactivos o todos; activos por defecto).
 - Dar de baja clientes.
 - Volver a dar de alta clientes.
+
+El listado se ordena por nombre y muestra hasta **10 registros por página**. La búsqueda se combina con el filtro de estado y el paginado se aplica sobre los resultados filtrados.
 
 La baja es lógica y no elimina físicamente el registro de la base de datos.
 
@@ -340,11 +344,13 @@ El módulo permite:
 - Editar productos.
 - Consultar detalles.
 - Buscar productos por código o descripción.
-- Filtrar por estado (activos, inactivos o todos).
+- Filtrar por estado (activos, inactivos o todos; activos por defecto).
 - Definir precio.
 - Definir porcentaje de IVA.
 - Dar de baja productos.
 - Volver a dar de alta productos.
+
+El listado se ordena por descripción y muestra hasta **10 registros por página**. La búsqueda por código o descripción se combina con el filtro de estado y el paginado se aplica sobre los resultados filtrados.
 
 ---
 
@@ -431,10 +437,15 @@ El historial permite:
 
 - Consultar facturas.
 - Buscar por número de factura.
-- Buscar por cliente.
+- Buscar por nombre del cliente.
 - Filtrar facturas activas.
 - Filtrar facturas anuladas.
+- Mostrar todas las facturas (opción por defecto).
+- Filtrar por método de pago: Efectivo, Tarjeta de débito, Tarjeta de crédito o Pago con QR; también se pueden mostrar todos.
+- Filtrar por fecha de emisión desde y/o hasta; la fecha hasta incluye el día completo.
 - Visualizar el comprobante.
+
+Los filtros pueden combinarse con la búsqueda. El historial se ordena por fecha de emisión descendente y muestra hasta **10 registros por página**, calculados sobre los resultados filtrados.
 
 ---
 
@@ -509,7 +520,7 @@ El proyecto incluye la carpeta:
 Migrations/
 ```
 
-Por este motivo no es necesario crear manualmente todas las tablas al instalar el proyecto en otra computadora: alcanza con ejecutar `Update-Database`.
+Por este motivo no es necesario crear manualmente todas las tablas al instalar el proyecto en otra computadora: alcanza con aplicar las migraciones siguiendo la sección Instalación, usando la conexión y el entorno correctos.
 
 ---
 
@@ -701,7 +712,7 @@ Antes de ejecutar PRISMA se recomienda tener instalado:
 - Visual Studio 2026 o una versión compatible.
 - .NET 10 SDK.
 - SQL Server (por ejemplo, SQL Server Express).
-- SQL Server Management Studio.
+- SQL Server Management Studio (opcional, para administrar la base de datos).
 - Git, si se desea clonar el repositorio.
 
 En Visual Studio se debe contar con las herramientas necesarias para desarrollo ASP.NET y web.
@@ -769,7 +780,7 @@ en la misma carpeta que `appsettings.json`, con la conexión correspondiente:
 }
 ```
 
-Este archivo está incluido en `.gitignore`, por lo que cada integrante puede tener su propia configuración sin subirla al repositorio.
+Este archivo está incluido en `.gitignore`, por lo que cada integrante puede tener su propia configuración sin subirla al repositorio. Se carga cuando el entorno es **Development**; los perfiles de `Properties/launchSettings.json` ya utilizan ese entorno. Las migraciones también deben ejecutarse en Development para usar la misma conexión.
 
 El nombre de la instancia puede variar según la computadora.
 
@@ -810,17 +821,21 @@ Tools
 Ejecutar:
 
 ```powershell
-Update-Database
+Update-Database -Args '--environment Development'
 ```
 
-Entity Framework utilizará las migraciones existentes para crear la base de datos y sus tablas.
+En la consola, seleccionar `SistemaFacturacion` como proyecto predeterminado y como proyecto de inicio. Entity Framework utilizará las migraciones existentes para crear la base de datos y sus tablas con la conexión configurada para Development.
 
 Este paso debe hacerse **antes** de ejecutar la aplicación por primera vez, ya que la carga de datos de prueba necesita que las tablas ya existan.
 
-Alternativa desde terminal (requiere la herramienta `dotnet-ef`):
+Alternativa desde terminal, en la carpeta que contiene `SistemaFacturacion.csproj`. Requiere `dotnet-ef` de la misma versión que los paquetes Entity Framework Core del proyecto (actualmente 10.0.12). Si no está instalada, ejecutar una vez:
 
 ```bash
-dotnet ef database update
+dotnet tool install --global dotnet-ef --version 10.0.12
+```
+
+```bash
+dotnet ef database update -- --environment Development
 ```
 
 ---
@@ -845,7 +860,7 @@ También puede ejecutarse desde terminal, parado en la carpeta del proyecto:
 dotnet run
 ```
 
-La aplicación se abrirá en el navegador utilizando la dirección local configurada por ASP.NET Core.
+Visual Studio abre el navegador con la dirección local configurada. Desde terminal, abrir manualmente la URL que aparece en la salida de `dotnet run`; los perfiles y direcciones se definen en `Properties/launchSettings.json`.
 
 ---
 
@@ -853,33 +868,37 @@ La aplicación se abrirá en el navegador utilizando la dirección local configu
 
 Al iniciar la aplicación, `Program.cs` ejecuta `DbInitializer`, que carga datos de ejemplo para poder probar el sistema sin tener que cargarlos a mano.
 
-**La carga se realiza solo si las tablas `Clientes` y `Productos` están vacías.** Si ya existen datos, no se modifica nada, por lo que es seguro reiniciar la aplicación.
+**La carga se realiza solo si ambas tablas, `Clientes` y `Productos`, están vacías.** Si existe al menos un registro en cualquiera de ellas, se omite toda la carga, incluidas las facturas. Reiniciar no actualiza ni completa los datos existentes; una base cargada con una versión anterior conserva sus registros.
 
 | Entidad   | Cantidad | Detalle |
 |-----------|----------|---------|
-| Clientes  | 10       | 9 activos y 1 inactivo (baja lógica de ejemplo). Incluye empresas (con CUIT) y personas (con DNI) de distintas provincias |
-| Productos | 12       | 11 activos y 1 inactivo. Artículos de tecnología con IVA del 21 % |
-| Facturas  | 5        | 4 activas y 1 anulada, con distintos métodos de pago y notas |
+| Clientes  | 25       | 23 activos y 2 inactivos (desglose confirmado en `DbInitializer`). Incluye empresas (con CUIT) y personas (con DNI) de distintas provincias |
+| Productos | 17       | 16 activos y 1 inactivo. Artículos de tecnología con IVA del 21 % |
+| Facturas  | 13       | 10 activas y 3 anuladas, con distintos métodos de pago y notas |
 
-Con la base recién cargada, el dashboard debería mostrar:
+**Consistencia del seed:** las cantidades anteriores documentan el conjunto de prueba previsto. En el `DbInitializer.cs` público revisado el 8 de octubre de 2026, el producto inactivo `MOUSE-12` aparece dos veces: se declaran 18 productos (16 activos y 2 inactivos). Para que una carga nueva coincida con los 17 productos indicados, debe corregirse ese duplicado en el código. Esta edición del README no modifica el seed.
+
+Con la base recién cargada y el seed consistente con el conjunto previsto, el dashboard debería mostrar:
 
 | Indicador            | Valor esperado |
 |----------------------|----------------|
-| Clientes activos     | 9              |
-| Productos activos    | 11             |
-| Facturas activas     | 4              |
-| Facturas anuladas    | 1              |
-| Total facturado      | $ 2.550.377,50 |
+| Clientes activos     | 23             |
+| Productos activos    | 16             |
+| Facturas activas     | 10             |
+| Facturas anuladas    | 3              |
+| Total facturado      | Verificar en el dashboard: suma de los totales de las facturas activas |
 
-Si ocurre un error durante la carga (por ejemplo, porque todavía no se ejecutó `Update-Database`), la aplicación no se detiene: el error queda registrado en el log con el mensaje "Error al cargar datos de prueba".
+No se publica un nuevo importe total facturado sin verificarlo con el conjunto actualizado; el valor anterior correspondía a los datos de prueba anteriores.
+
+Si ocurre un error durante la carga (por ejemplo, porque todavía no se ejecutaron las migraciones), la aplicación no se detiene: el error queda registrado en el log con el mensaje "Error al cargar datos de prueba". La carga realiza guardados por etapas, por lo que puede quedar incompleta; reiniciar no la completa si ya existen clientes o productos.
 
 ## Volver a cargar los datos de prueba
 
-Para empezar de cero, eliminar la base y volver a crearla desde la Package Manager Console:
+Para empezar de cero en una base de prueba, comprobar que la conexión apunta a la base local que se desea reiniciar. Los siguientes comandos eliminan todos sus datos. Desde la Package Manager Console, usar el mismo entorno Development que en la instalación:
 
 ```powershell
-Drop-Database
-Update-Database
+Drop-Database -Args '--environment Development'
+Update-Database -Args '--environment Development'
 ```
 
 Al volver a ejecutar la aplicación, los datos de prueba se cargan nuevamente.
@@ -950,7 +969,8 @@ PRISMA cuenta actualmente con los módulos principales necesarios para realizar 
 - Cálculo de IVA y totales.
 - Métodos de pago.
 - Historial.
-- Búsquedas y filtros.
+- Búsquedas y filtros ampliados en Clientes, Productos y Facturas.
+- Paginado de hasta 10 registros por página en los tres listados.
 - Anulación de facturas.
 - Dashboard.
 - Impresión de comprobantes.
@@ -960,10 +980,13 @@ PRISMA cuenta actualmente con los módulos principales necesarios para realizar 
 
 ## Mejoras futuras
 
-Estado de evolución del sistema:
+**Fase 1 — Usabilidad: completada.**
 
-- [x] **Usabilidad** → Paginado en listados
-- [x] **Usabilidad** → Mejoras y ampliación de filtros
+- [x] **Usabilidad** → Paginado de hasta 10 registros por página en Clientes, Productos y Facturas
+- [x] **Usabilidad** → Mejoras y ampliación de búsquedas y filtros en Clientes, Productos y Facturas
+
+Pendientes:
+
 - [ ] **Seguridad** → Login con roles (Superusuario / Usuario)
 - [ ] **Arquitectura** → Separar frontend con React + Expo
 - [ ] **Pagos** → Integración de pasarela de pago real
