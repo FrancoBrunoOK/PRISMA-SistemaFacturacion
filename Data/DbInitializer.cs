@@ -381,7 +381,6 @@ new Cliente
                 new Producto { Codigo = "RAM-10",   Descripcion = "Memoria RAM DDR4 16GB 3200MHz",                 Precio = 72000m,  IVA = 21m, Activo = true,  FechaAlta = new DateTime(2025, 7, 1) },
                 new Producto { Codigo = "SILL-11",  Descripcion = "Silla gamer ergonómica con apoyo lumbar",       Precio = 145000m, IVA = 21m, Activo = true,  FechaAlta = new DateTime(2025, 7, 20) },
                 new Producto { Codigo = "MOUSE-12", Descripcion = "Mouse pad XL gamer RGB",                        Precio = 12500m,  IVA = 21m, Activo = false, FechaAlta = new DateTime(2025, 8, 1) },
-                new Producto { Codigo = "MOUSE-12", Descripcion = "Mouse pad XL gamer RGB",                        Precio = 12500m,  IVA = 21m, Activo = false, FechaAlta = new DateTime(2025, 8, 1) },
                 new Producto { Codigo = "HUB-13",   Descripcion = "Hub USB-C 6 en 1 HDMI USB 3.0",                  Precio = 38500m,  IVA = 21m, Activo = true,  FechaAlta = new DateTime(2025, 8, 15) },
                 new Producto { Codigo = "DISC-14",  Descripcion = "Disco externo portátil 2TB USB 3.0",             Precio = 115000m, IVA = 21m, Activo = true,  FechaAlta = new DateTime(2025, 9, 1) },
                 new Producto { Codigo = "ROUT-15",  Descripcion = "Router WiFi doble banda Gigabit",                 Precio = 68000m,  IVA = 21m, Activo = true,  FechaAlta = new DateTime(2025, 9, 18) },
