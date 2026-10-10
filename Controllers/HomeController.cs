@@ -3,9 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SistemaFacturacion.Data;
 using SistemaFacturacion.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SistemaFacturacion.Controllers
 {
+    [Authorize]
     public class HomeController : Controller
     {
         private readonly ApplicationDbContext _context;

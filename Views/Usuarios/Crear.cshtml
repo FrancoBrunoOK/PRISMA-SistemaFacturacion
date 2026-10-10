@@ -1,0 +1,115 @@
+﻿@model SistemaFacturacion.Models.CrearUsuarioViewModel
+
+@{
+    ViewData["Title"] = "Crear usuario";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+    <div>
+        <h1 class="mb-1">Nuevo usuario</h1>
+        <p class="text-muted mb-0">
+            Registrar una nueva cuenta en PRISMA
+        </p>
+    </div>
+
+    <a asp-action="Index"
+       class="btn btn-outline-secondary">
+        Volver
+    </a>
+</div>
+
+<!-- FORMULARIO -->
+<div class="card">
+    <div class="card-body p-4">
+
+        <form asp-action="Crear" method="post">
+
+            @Html.AntiForgeryToken()
+
+            <div asp-validation-summary="ModelOnly"
+                 class="text-danger mb-3">
+            </div>
+
+            <div class="row g-3">
+
+                <!-- EMAIL -->
+                <div class="col-md-6">
+                    <label asp-for="Email"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Email"
+                           class="form-control"
+                           placeholder="usuario@ejemplo.com"
+                           autocomplete="off" />
+
+                    <span asp-validation-for="Email"
+                          class="text-danger small">
+                    </span>
+                </div>
+
+                <!-- CONTRASEÑA -->
+                <div class="col-md-6">
+                    <label asp-for="Password"
+                           class="form-label">
+                    </label>
+
+                    <input asp-for="Password"
+                           type="password"
+                           class="form-control"
+                           autocomplete="new-password" />
+
+                    <span asp-validation-for="Password"
+                          class="text-danger small">
+                    </span>
+                </div>
+
+                <!-- ROL -->
+                <div class="col-md-6">
+                    <label asp-for="Rol"
+                           class="form-label">
+                    </label>
+
+                    <select asp-for="Rol"
+                            class="form-select">
+
+                        <option value="Usuario">
+                            Usuario
+                        </option>
+
+                        <option value="Superusuario">
+                            Superusuario
+                        </option>
+
+                    </select>
+
+                    <span asp-validation-for="Rol"
+                          class="text-danger small">
+                    </span>
+                </div>
+
+            </div>
+
+            <div class="mt-4 d-flex gap-2">
+
+                <button type="submit"
+                        class="btn btn-primary">
+                    Crear usuario
+                </button>
+
+                <a asp-action="Index"
+                   class="btn btn-outline-secondary">
+                    Cancelar
+                </a>
+
+            </div>
+
+        </form>
+
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

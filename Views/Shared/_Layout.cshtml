@@ -1,18 +1,13 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="es">
-
 <head>
-
     <meta charset="utf-8" />
 
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0" />
 
-    <title>
-        @ViewData["Title"] - PRISMA
-    </title>
-
-
+    <title>@ViewData["Title"] - PRISMA</title>
 
     <link rel="stylesheet"
           href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
@@ -24,25 +19,19 @@
     <link rel="stylesheet"
           href="~/SistemaFacturacion.styles.css"
           asp-append-version="true" />
-
 </head>
 
 <body>
-
     <!-- BARRA DE NAVEGACIÓN -->
     <header>
-
         <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-
             <div class="container">
 
                 <!-- NOMBRE DEL SISTEMA -->
                 <a class="navbar-brand fw-bold"
                    asp-controller="Home"
                    asp-action="Index">
-
-                   PRISMA
-
+                    PRISMA
                 </a>
 
                 <!-- BOTÓN PARA PANTALLAS PEQUEÑAS -->
@@ -53,9 +42,7 @@
                         aria-controls="navbarPrincipal"
                         aria-expanded="false"
                         aria-label="Mostrar navegación">
-
                     <span class="navbar-toggler-icon"></span>
-
                 </button>
 
                 <div class="collapse navbar-collapse"
@@ -64,93 +51,106 @@
                     <!-- MENÚ PRINCIPAL -->
                     <ul class="navbar-nav me-auto mb-2 mb-lg-0">
 
-                        <!-- INICIO -->
                         <li class="nav-item">
-
                             <a class="nav-link"
                                asp-controller="Home"
                                asp-action="Index">
-
                                 Inicio
-
                             </a>
-
                         </li>
 
-                        <!-- CLIENTES -->
                         <li class="nav-item">
-
                             <a class="nav-link"
                                asp-controller="Clientes"
                                asp-action="Index">
-
                                 Clientes
-
                             </a>
-
                         </li>
 
-                        <!-- PRODUCTOS -->
                         <li class="nav-item">
-
                             <a class="nav-link"
                                asp-controller="Productos"
                                asp-action="Index">
-
                                 Productos
-
                             </a>
-
                         </li>
 
-                        <!-- FACTURAS -->
                         <li class="nav-item">
-
                             <a class="nav-link"
                                asp-controller="Facturas"
                                asp-action="Index">
-
                                 Facturas
-
                             </a>
-
                         </li>
+                    </ul>
+                    @if (User.IsInRole("Superusuario"))
+{
+    <li class="nav-item">
+        <a class="nav-link"
+           asp-controller="Usuarios"
+           asp-action="Index">
+            Usuarios
+        </a>
+    </li>
+}
+
+
+
+                    <!-- AUTENTICACIÓN -->
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+
+                        @if (User.Identity?.IsAuthenticated == true)
+                        {
+                            <li class="nav-item me-lg-3">
+                                <span class="navbar-text text-light">
+                                    @User.Identity.Name
+                                </span>
+                            </li>
+
+                            <li class="nav-item">
+                                <form asp-controller="Cuenta"
+                                      asp-action="Logout"
+                                      method="post"
+                                      class="d-inline">
+
+                                    <button type="submit"
+                                            class="btn btn-outline-light btn-sm">
+                                        Cerrar sesión
+                                    </button>
+                                </form>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="btn btn-outline-light btn-sm"
+                                   asp-controller="Cuenta"
+                                   asp-action="Login">
+                                    Ingresar
+                                </a>
+                            </li>
+                        }
 
                     </ul>
-
                 </div>
-
             </div>
-
         </nav>
-
     </header>
-
 
     <!-- CONTENIDO PRINCIPAL -->
     <div class="container mt-4">
-
-        <main role="main"
-              class="pb-5">
-
+        <main role="main" class="pb-5">
             @RenderBody()
-
         </main>
-
     </div>
-
 
     <!-- PIE DE PÁGINA -->
     <footer class="border-top footer text-muted">
-
         <div class="container">
-
-            &copy; 2026 - PRISMA | Sistema de Gestión y Facturación
-
+            &copy; 2026 - PRISMA |
+            Sistema de Gestión y Facturación
         </div>
-
     </footer>
-
 
     <!-- JAVASCRIPT -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
@@ -160,10 +160,6 @@
     <script src="~/js/site.js"
             asp-append-version="true"></script>
 
-    @await RenderSectionAsync(
-        "Scripts",
-        required: false)
-
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
-
 </html>

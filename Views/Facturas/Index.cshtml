@@ -408,7 +408,7 @@
                                             Ver
                                         </a>
 
-                                        @if (factura.Activa)
+                                            @if (factura.Activa && User.IsInRole("Superusuario"))
                                         {
                                             <form asp-action="DarDeBaja"
                                                   method="post"

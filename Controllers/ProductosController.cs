@@ -1,11 +1,14 @@
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SistemaFacturacion.Models;
 using SistemaFacturacion.Data;
 
+[Authorize]
 public class ProductosController : Controller
 {
+    
     private readonly ApplicationDbContext _context;
 
     public ProductosController(ApplicationDbContext context)

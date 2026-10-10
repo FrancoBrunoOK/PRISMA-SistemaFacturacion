@@ -1,0 +1,92 @@
+﻿
+@model IEnumerable<SistemaFacturacion.Models.UsuarioListadoViewModel>
+
+@{
+    ViewData["Title"] = "Usuarios";
+}
+
+<!-- ENCABEZADO -->
+<div class="page-header mb-4">
+
+    <div>
+        <h1 class="mb-1">Usuarios</h1>
+        <p class="text-muted mb-0">
+            Administración de usuarios y permisos
+        </p>
+    </div>
+
+    <a asp-controller="Usuarios"
+       asp-action="Crear"
+       class="btn btn-primary">
+        + Nuevo usuario
+    </a>
+
+</div>
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success mb-4">
+        @TempData["MensajeExito"]
+    </div>
+}
+
+
+<!-- LISTADO -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th class="ps-4">Correo electrónico</th>
+                        <th>Rol</th>
+                        <th>Estado</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @if (Model.Any())
+                    {
+                        @foreach (var usuario in Model)
+                        {
+                            <tr>
+                                <td class="ps-4">
+                                    <strong>@usuario.Email</strong>
+                                </td>
+
+                                <td>
+                                    <span class="badge bg-primary-subtle text-primary">
+                                        @usuario.Roles
+                                    </span>
+                                </td>
+
+                                <td>
+                                    @if (usuario.Bloqueado)
+                                    {
+                                        <span class="badge bg-danger-subtle text-danger">
+                                            Bloqueado
+                                        </span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-success-subtle text-success">
+                                            Habilitado
+                                        </span>
+                                    }
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-center py-5">
+                                No hay usuarios registrados.
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

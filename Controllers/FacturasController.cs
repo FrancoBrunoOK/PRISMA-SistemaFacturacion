@@ -3,9 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using SistemaFacturacion.Data;
 using SistemaFacturacion.Models;
 using SistemaFacturacion.Extensions;
+using Microsoft.AspNetCore.Authorization;
 
 namespace SistemaFacturacion.Controllers
 {
+    [Authorize]
     public class FacturasController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -484,13 +486,19 @@ namespace SistemaFacturacion.Controllers
         // DAR DE BAJA / ANULAR FACTURA
         // =====================================================
 
+
+        // =====================================================
+        // DAR DE BAJA / ANULAR FACTURA
+        // SOLO SUPERUSUARIO
+        // =====================================================
+
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Superusuario")]
         public async Task<IActionResult> DarDeBaja(int id)
         {
             var factura = await _context.Facturas
-                .FirstOrDefaultAsync(f =>
-                    f.Id == id);
+                .FirstOrDefaultAsync(f => f.Id == id);
 
             if (factura == null)
             {
@@ -503,5 +511,6 @@ namespace SistemaFacturacion.Controllers
 
             return RedirectToAction(nameof(Index));
         }
+
     }
 }
